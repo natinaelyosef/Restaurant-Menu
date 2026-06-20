@@ -1,0 +1,34 @@
+{
+  "stack": [],
+  "mismatches": [
+    {
+      "type": "autoPopped",
+      "popped": [
+        {
+          "name": "form",
+          "line": 161,
+          "start": 6794
+        },
+        {
+          "name": "div",
+          "line": 162,
+          "start": 6845
+        }
+      ],
+      "line": 704
+    },
+    {
+      "type": "mismatch",
+      "expected": "AdminLayout",
+      "found": "div",
+      "line": 706,
+      "stackTop": [
+        {
+          "name": "AdminLayout",
+          "line": 152,
+          "start": 6290
+        }
+      ]
+    }
+  ]
+}

@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -21,6 +20,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'is_active',
+        'status',
     ];
 
     /**
@@ -43,6 +45,60 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
+    }
+
+    // Helper methods to check user role
+    public function isCustomer()
+    {
+        return $this->role === 'customer';
+    }
+
+    public function isStoreOwner()
+    {
+        return $this->role === 'store_owner';
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->role === 'super_admin';
+    }
+
+    public function isSubAdmin()
+    {
+        return $this->role === 'sub_admin';
+    }
+
+    public function isActive()
+    {
+        return $this->is_active ?? true;
+    }
+
+    // Status helper methods
+    public function isSuspended()
+    {
+        return $this->status === 'suspended';
+    }
+
+    public function isBanned()
+    {
+        return $this->status === 'banned';
+    }
+
+    public function isActiveStatus()
+    {
+        return $this->status === 'active';
+    }
+
+    // Get dashboard route based on role
+    public function getDashboardRoute()
+    {
+        return match($this->role) {
+            'super_admin' => '/super/dashboard',
+            'sub_admin' => '/sub/dashboard',
+            'customer' => '/customer/dashboard',
+            default => '/customer/dashboard',
+        };
     }
 }

@@ -1,0 +1,198 @@
+[
+  {
+    "line": 173,
+    "pos": 7570,
+    "end": 8053,
+    "selfClosing": true,
+    "snippet": "<input\n                                        type=\"text\"\n                                        value={formData.name}\n                                        onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}\n                                        className=\"w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent\"\n                                        required\n                                    />"
+  },
+  {
+    "line": 189,
+    "pos": 8587,
+    "end": 9135,
+    "selfClosing": true,
+    "snippet": "<input\n                                                    type=\"radio\"\n                                                    name=\"logo_type\"\n                                                    value=\"text\"\n                                                    checked={formData.logo_type === 'text'}\n                                                    onChange={(e) => setFormData(prev => ({ ...prev, logo_type: e.target.value }))}\n                                                    className=\"mr-2\"\n                                                />"
+  },
+  {
+    "line": 200,
+    "pos": 9412,
+    "end": 9964,
+    "selfClosing": true,
+    "snippet": "<input\n                                                    type=\"radio\"\n                                                    name=\"logo_type\"\n                                                    value=\"upload\"\n                                                    checked={formData.logo_type === 'upload'}\n                                                    onChange={(e) => setFormData(prev => ({ ...prev, logo_type: e.target.value }))}\n                                                    className=\"mr-2\"\n                                                />"
+  },
+  {
+    "line": 211,
+    "pos": 10243,
+    "end": 10789,
+    "selfClosing": true,
+    "snippet": "<input\n                                                    type=\"radio\"\n                                                    name=\"logo_type\"\n                                                    value=\"url\"\n                                                    checked={formData.logo_type === 'url'}\n                                                    onChange={(e) => setFormData(prev => ({ ...prev, logo_type: e.target.value }))}\n                                                    className=\"mr-2\"\n                                                />"
+  },
+  {
+    "line": 224,
+    "pos": 11097,
+    "end": 11610,
+    "selfClosing": true,
+    "snippet": "<input\n                                                type=\"text\"\n                                                value={formData.logo_text}\n                                                onChange={(e) => setFormData(prev => ({ ...prev, logo_text: e.target.value, logo: e.target.value }))}\n                                                placeholder=\"🍔\"\n                                                className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                            />"
+  },
+  {
+    "line": 234,
+    "pos": 11778,
+    "end": 12142,
+    "selfClosing": true,
+    "snippet": "<input\n                                                type=\"file\"\n                                                accept=\"image/*\"\n                                                onChange={handleLogoChange}\n                                                className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                            />"
+  },
+  {
+    "line": 243,
+    "pos": 12307,
+    "end": 12843,
+    "selfClosing": true,
+    "snippet": "<input\n                                                type=\"url\"\n                                                value={formData.logo_url}\n                                                onChange={(e) => setFormData(prev => ({ ...prev, logo_url: e.target.value, logo: e.target.value }))}\n                                                placeholder=\"https://example.com/logo.png\"\n                                                className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                            />"
+  },
+  {
+    "line": 403,
+    "pos": 23320,
+    "end": 23766,
+    "selfClosing": true,
+    "snippet": "<input\n                                                type=\"text\"\n                                                value={formData.sections.specials?.heading || ''}\n                                                onChange={(e) => handleSectionChange('specials', 'heading', e.target.value)}\n                                                className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                            />"
+  },
+  {
+    "line": 412,
+    "pos": 24035,
+    "end": 24477,
+    "selfClosing": true,
+    "snippet": "<input\n                                                type=\"text\"\n                                                value={formData.sections.specials?.title || ''}\n                                                onChange={(e) => handleSectionChange('specials', 'title', e.target.value)}\n                                                className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                            />"
+  },
+  {
+    "line": 436,
+    "pos": 25982,
+    "end": 26483,
+    "selfClosing": true,
+    "snippet": "<input\n                                                                type=\"text\"\n                                                                value={item.icon || ''}\n                                                                onChange={(e) => handleSectionChange('specials', 'icon', e.target.value, index)}\n                                                                className=\"w-full px-3 py-2 border border-gray-300 rounded\"\n                                                            />"
+  },
+  {
+    "line": 445,
+    "pos": 26808,
+    "end": 27311,
+    "selfClosing": true,
+    "snippet": "<input\n                                                                type=\"text\"\n                                                                value={item.title || ''}\n                                                                onChange={(e) => handleSectionChange('specials', 'title', e.target.value, index)}\n                                                                className=\"w-full px-3 py-2 border border-gray-300 rounded\"\n                                                            />"
+  },
+  {
+    "line": 463,
+    "pos": 28491,
+    "end": 28994,
+    "selfClosing": true,
+    "snippet": "<input\n                                                                type=\"text\"\n                                                                value={item.price || ''}\n                                                                onChange={(e) => handleSectionChange('specials', 'price', e.target.value, index)}\n                                                                className=\"w-full px-3 py-2 border border-gray-300 rounded\"\n                                                            />"
+  },
+  {
+    "line": 472,
+    "pos": 29323,
+    "end": 29832,
+    "selfClosing": true,
+    "snippet": "<input\n                                                                type=\"text\"\n                                                                value={item.oldPrice || ''}\n                                                                onChange={(e) => handleSectionChange('specials', 'oldPrice', e.target.value, index)}\n                                                                className=\"w-full px-3 py-2 border border-gray-300 rounded\"\n                                                            />"
+  },
+  {
+    "line": 491,
+    "pos": 30577,
+    "end": 31017,
+    "selfClosing": true,
+    "snippet": "<input\n                                                type=\"text\"\n                                                value={formData.sections.about?.heading || ''}\n                                                onChange={(e) => handleSectionChange('about', 'heading', e.target.value)}\n                                                className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                            />"
+  },
+  {
+    "line": 500,
+    "pos": 31278,
+    "end": 31714,
+    "selfClosing": true,
+    "snippet": "<input\n                                                type=\"text\"\n                                                value={formData.sections.about?.title || ''}\n                                                onChange={(e) => handleSectionChange('about', 'title', e.target.value)}\n                                                className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                            />"
+  },
+  {
+    "line": 518,
+    "pos": 32669,
+    "end": 33105,
+    "selfClosing": true,
+    "snippet": "<input\n                                                type=\"text\"\n                                                value={formData.sections.about?.years || ''}\n                                                onChange={(e) => handleSectionChange('about', 'years', e.target.value)}\n                                                className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                            />"
+  },
+  {
+    "line": 529,
+    "pos": 33538,
+    "end": 34083,
+    "selfClosing": true,
+    "snippet": "<input\n                                                        type=\"radio\"\n                                                        name=\"about_image_source\"\n                                                        value=\"url\"\n                                                        checked={aboutImageSource === 'url'}\n                                                        onChange={() => setAboutImageSource('url')}\n                                                        className=\"mr-2\"\n                                                    />"
+  },
+  {
+    "line": 540,
+    "pos": 34369,
+    "end": 34923,
+    "selfClosing": true,
+    "snippet": "<input\n                                                        type=\"radio\"\n                                                        name=\"about_image_source\"\n                                                        value=\"upload\"\n                                                        checked={aboutImageSource === 'upload'}\n                                                        onChange={() => setAboutImageSource('upload')}\n                                                        className=\"mr-2\"\n                                                    />"
+  },
+  {
+    "line": 553,
+    "pos": 35251,
+    "end": 35706,
+    "selfClosing": true,
+    "snippet": "<input\n                                                    type=\"url\"\n                                                    value={formData.sections.about?.image || ''}\n                                                    onChange={(e) => handleSectionChange('about', 'image', e.target.value)}\n                                                    className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                                />"
+  },
+  {
+    "line": 562,
+    "pos": 35884,
+    "end": 36273,
+    "selfClosing": true,
+    "snippet": "<input\n                                                    type=\"file\"\n                                                    accept=\"image/*\"\n                                                    onChange={handleAboutFileChange}\n                                                    className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                                />"
+  },
+  {
+    "line": 586,
+    "pos": 37309,
+    "end": 37763,
+    "selfClosing": true,
+    "snippet": "<input\n                                                type=\"text\"\n                                                value={formData.sections.testimonials?.heading || ''}\n                                                onChange={(e) => handleSectionChange('testimonials', 'heading', e.target.value)}\n                                                className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                            />"
+  },
+  {
+    "line": 595,
+    "pos": 38024,
+    "end": 38474,
+    "selfClosing": true,
+    "snippet": "<input\n                                                type=\"text\"\n                                                value={formData.sections.testimonials?.title || ''}\n                                                onChange={(e) => handleSectionChange('testimonials', 'title', e.target.value)}\n                                                className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                            />"
+  },
+  {
+    "line": 609,
+    "pos": 39262,
+    "end": 39771,
+    "selfClosing": true,
+    "snippet": "<input\n                                                                type=\"text\"\n                                                                value={item.avatar || ''}\n                                                                onChange={(e) => handleSectionChange('testimonials', 'avatar', e.target.value, index)}\n                                                                className=\"w-full px-3 py-2 border border-gray-300 rounded\"\n                                                            />"
+  },
+  {
+    "line": 618,
+    "pos": 40096,
+    "end": 40603,
+    "selfClosing": true,
+    "snippet": "<input\n                                                                type=\"text\"\n                                                                value={item.stars || ''}\n                                                                onChange={(e) => handleSectionChange('testimonials', 'stars', e.target.value, index)}\n                                                                className=\"w-full px-3 py-2 border border-gray-300 rounded\"\n                                                            />"
+  },
+  {
+    "line": 636,
+    "pos": 41779,
+    "end": 42284,
+    "selfClosing": true,
+    "snippet": "<input\n                                                                type=\"text\"\n                                                                value={item.name || ''}\n                                                                onChange={(e) => handleSectionChange('testimonials', 'name', e.target.value, index)}\n                                                                className=\"w-full px-3 py-2 border border-gray-300 rounded\"\n                                                            />"
+  },
+  {
+    "line": 645,
+    "pos": 42608,
+    "end": 43113,
+    "selfClosing": true,
+    "snippet": "<input\n                                                                type=\"text\"\n                                                                value={item.role || ''}\n                                                                onChange={(e) => handleSectionChange('testimonials', 'role', e.target.value, index)}\n                                                                className=\"w-full px-3 py-2 border border-gray-300 rounded\"\n                                                            />"
+  },
+  {
+    "line": 664,
+    "pos": 43871,
+    "end": 44329,
+    "selfClosing": true,
+    "snippet": "<input\n                                                type=\"text\"\n                                                value={formData.sections.reservation?.titleSmall || ''}\n                                                onChange={(e) => handleSectionChange('reservation', 'titleSmall', e.target.value)}\n                                                className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                            />"
+  },
+  {
+    "line": 673,
+    "pos": 44596,
+    "end": 45054,
+    "selfClosing": true,
+    "snippet": "<input\n                                                type=\"text\"\n                                                value={formData.sections.reservation?.titleLarge || ''}\n                                                onChange={(e) => handleSectionChange('reservation', 'titleLarge', e.target.value)}\n                                                className=\"w-full px-4 py-2 border border-gray-300 rounded-lg\"\n                                            />"
+  }
+]

@@ -1,0 +1,6 @@
+const fs=require('fs');const events=JSON.parse(fs.readFileSync('tmp_jsx_events.json','utf8'));let stack=[];for(let i=0;i<events.length;i++){const e=events[i]; if(e.type==='open'){ if(!e.selfClosing) stack.push({name:e.name,line:e.line}); } else if(e.type==='close'){ const top=stack[stack.length-1]; if(!top){ console.log('Unmatched close',e.name,'at event',i,'line',e.line); } else if(top.name===e.name){ stack.pop(); } else { console.log('Mismatch at event',i,'closing',e.name,'expected',top.name,'stackTop',stack.slice(-5)); // attempt to find
+    let foundIdx=-1; for(let k=stack.length-1;k>=0;k--){ if(stack[k].name===e.name){ foundIdx=k; break; } } if(foundIdx!==-1){ console.log('Found match deeper at idx',foundIdx,'popping until it'); stack.splice(foundIdx); } else { console.log('No match found, ignoring'); }
+ }
+ } else if(e.type==='unclosedTag'){ console.log('unclosed tag at',e.line); }
+ if(i>280) console.log(i,e.line,e.type,e.name,'stackTop',stack.slice(-3).map(x=>x.name)); }
+console.log('Final stack',stack); fs.writeFileSync('tmp_jsx_stack_final.json',JSON.stringify(stack,null,2));
