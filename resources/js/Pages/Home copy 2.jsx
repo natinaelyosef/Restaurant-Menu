@@ -201,9 +201,7 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
 
     const getImageUrl = (image) => {
         if (!image) return '';
-        if (image.startsWith('http')) return image;
-        if (image.startsWith('/')) return image;
-        if (image.startsWith('storage/')) return `/${image}`;
+        if (image.startsWith('http') || image.startsWith('/')) return image;
         return `/storage/${image}`;
     };
 

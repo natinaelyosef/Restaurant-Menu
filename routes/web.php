@@ -21,6 +21,10 @@ Route::post('/menu-items/{menuItem}/rate', [FoodItemController::class, 'rate'])-
 // Authenticated Routes (all logged-in users)
 // ============================================
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function (Request $request) {
+        return redirect($request->user()->getDashboardRoute());
+    })->name('dashboard');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

@@ -29,13 +29,41 @@ export default function MenuData({ auth, menuItems = [] }) {
 
     const categories = ['all', ...new Set(menuItems.map(item => item.category))];
 
-    // Delete Handler (unchanged)
+    const getImageUrl = (imagePath) => {
+        if (!imagePath) return '';
+        if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
+        if (imagePath.startsWith('/')) return imagePath;
+        if (imagePath.startsWith('storage/')) return `/${imagePath}`;
+        return `/storage/${imagePath}`;
+    };
+
+    // Delete Handler: use fetch to delete and refresh without navigating
     const handleDelete = (id) => {
-        if (confirm('Are you sure you want to delete this item?')) {
-            router.delete(`/admin/menu-items/${id}`, {
-                preserveScroll: true,
-            });
-        }
+        if (!confirm('Are you sure you want to delete this item?')) return;
+
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        const token = csrfMeta ? csrfMeta.getAttribute('content') : '';
+
+        fetch(`/admin/menu-items/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': token || '',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+        .then((res) => {
+            if (res.ok || res.status === 204) {
+                // reload the page data via a full visit to keep Inertia state
+                router.reload();
+            } else {
+                router.delete(`/admin/menu-items/${id}`, { preserveScroll: true });
+            }
+        })
+        .catch((err) => {
+            console.error('Delete failed', err);
+            alert('Failed to delete menu item. See console for details.');
+        });
     };
 
     // --- Edit Modal Handlers ---
@@ -48,7 +76,7 @@ export default function MenuData({ auth, menuItems = [] }) {
             category: item.category,
             image: null,
         });
-        setImagePreview(item.image ? `/storage/${item.image}` : '');
+        setImagePreview(item.image ? getImageUrl(item.image) : '');
         setIsEditModalOpen(true);
     };
 
@@ -163,7 +191,7 @@ export default function MenuData({ auth, menuItems = [] }) {
                                                         {item.image ? (
                                                             <img 
                                                                 className="h-10 w-10 rounded-lg object-cover border border-gray-200" 
-                                                                src={`/storage/${item.image}`} 
+                                                                src={getImageUrl(item.image)} 
                                                                 alt={item.name}
                                                                 onError={(e) => { e.target.src = 'https://via.placeholder.com/40?text=No+Img'; }}
                                                             />

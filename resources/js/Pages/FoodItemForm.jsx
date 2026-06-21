@@ -16,6 +16,14 @@ export default function FoodItemForm({ menuItem }) {
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const getImageUrl = (img) => {
+        if (!img) return '';
+        if (img.startsWith('http://') || img.startsWith('https://')) return img;
+        if (img.startsWith('/')) return img;
+        if (img.startsWith('storage/')) return `/${img}`;
+        return `/storage/${img}`;
+    };
+
     // Populate form when editing
     useEffect(() => {
         if (menuItem) {
@@ -27,7 +35,7 @@ export default function FoodItemForm({ menuItem }) {
                 image: null,
             });
             if (menuItem.image) {
-                setImagePreview(`/storage/${menuItem.image}`);
+                setImagePreview(getImageUrl(menuItem.image));
             }
         }
     }, [menuItem]);

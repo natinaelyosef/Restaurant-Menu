@@ -48,6 +48,12 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        try {
+            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\WelcomeUserMail($user));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send welcome email to ' . $user->email . ': ' . $e->getMessage());
+        }
+
         Auth::login($user);
 
         return redirect('/customer/dashboard');
