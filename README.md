@@ -1,171 +1,112 @@
-# BestBuy_Book Project
+# Restaurant-Menu
 
-This is a Laravel application for BestBuy Book management.
+A Laravel (v12) application for managing a restaurant menu, reservations, and basic restaurant settings. Built with PHP ^8.2, Inertia + React, Tailwind CSS, and Vite. Includes utilities for PDF generation and a simple public view.
 
-## Project Structure
+**Features**
+- **Menu management:** add, edit, and remove menu items (`app/Models/MenuItem.php`).
+- **Reservations:** store and manage reservations (`app/Models/Reservation.php`).
+- **Restaurant settings:** site-wide settings (`app/Models/RestaurantSetting.php`).
+- **Auth:** user authentication scaffolding and routes (`routes/auth.php`).
+- **PDF export:** server-side/JS helpers for generating PDFs (`generate_pdf.js`, `pdfkit`).
+- **Inertia + React frontend:** modern single-page experience with Vite and Tailwind.
 
-```
-C:.
-├── .editorconfig
-├── .env
-├── .env.example
-├── .gitattributes
-├── .gitignore
-├── .styleci.yml
-├── artisan
-├── CHANGELOG.md
-├── composer.json
-├── composer.lock
-├── directory_structure.txt
-├── generate_code_pdf.js
-├── jsconfig.json
-├── package-lock.json
-├── package.json
-├── phpunit.xml
-├── postcss.config.js
-├── project_source_code.pdf
-├── README.md
-├── server.php
-├── tailwind.config.js
-├── vite.config.js
-├── .github/
-│   └── workflows/
-│       ├── issues.yml
-│       ├── pull-requests.yml
-│       ├── tests.yml
-│       └── update-changelog.yml
-├── app/
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── Controller.php
-│   │   │   ├── ProfileController.php
-│   │   │   └── Auth/
-│   │   │       ├── AuthenticatedSessionController.php
-│   │   │       ├── ConfirmablePasswordController.php
-│   │   │       ├── EmailVerificationNotificationController.php
-│   │   │       ├── EmailVerificationPromptController.php
-│   │   │       ├── NewPasswordController.php
-│   │   │       ├── PasswordController.php
-│   │   │       ├── PasswordResetLinkController.php
-│   │   │       ├── RegisteredUserController.php
-│   │   │       └── VerifyEmailController.php
-│   │   ├── Middleware/
-│   │   │   └── HandleInertiaRequests.php
-│   │   └── Requests/
-│   │       ├── ProfileUpdateRequest.php
-│   │       └── Auth/
-│   │           └── LoginRequest.php
-│   ├── Models/
-│   │   └── User.php
-│   └── Providers/
-│       └── AppServiceProvider.php
-├── bootstrap/
-│   ├── app.php
-│   ├── providers.php
-│   └── cache/
-│       ├── .gitignore
-│       ├── packages.php
-│       └── services.php
-├── config/
-│   ├── app.php
-│   ├── auth.php
-│   ├── cache.php
-│   ├── database.php
-│   ├── filesystems.php
-│   ├── logging.php
-│   ├── mail.php
-│   ├── queue.php
-│   ├── services.php
-│   └── session.php
-├── database/
-│   ├── .gitignore
-│   ├── factories/
-│   │   └── UserFactory.php
-│   ├── migrations/
-│   │   ├── 0001_01_01_000000_create_users_table.php
-│   │   ├── 0001_01_01_000001_create_cache_table.php
-│   │   ├── 0001_01_01_000002_create_jobs_table.php
-│   │   └── 2026_03_07_195250_add_role_to_users_table.php
-│   └── seeders/
-│       └── DatabaseSeeder.php
-├── public/
-│   ├── .htaccess
-│   ├── favicon.ico
-│   ├── hot
-│   ├── index.php
-│   ├── robots.txt
-│   └── build/
-│       └── manifest.json
-├── resources/
-│   ├── css/
-│   │   └── app.css
-│   ├── js/
-│   │   ├── app.jsx
-│   │   ├── bootstrap.js
-│   │   ├── Components/
-│   │   ├── Contexts/
-│   │   ├── Layouts/
-│   │   ├── Pages/
-│   │   └── ...
-│   └── views/
-│       └── app.blade.php
-├── routes/
-│   ├── auth.php
-│   ├── console.php
-│   └── web.php
-├── storage/
-│   ├── app/
-│   │   ├── private/
-│   │   └── public/
-│   ├── framework/
-│   │   ├── cache/
-│   │   ├── sessions/
-│   │   ├── testing/
-│   │   └── views/
-│   └── logs/
-├── tests/
-│   ├── TestCase.php
-│   ├── Feature/
-│   │   ├── ExampleTest.php
-│   │   └── ProfileTest.php
-│   └── Unit/
-│       └── ExampleTest.php
-└── vendor/
-    └── ... (Composer dependencies)
+**Requirements**
+- PHP ^8.2
+- Composer
+- Node.js (recommend 18+)
+- npm (or pnpm/yarn)
+- SQLite, MySQL, or other supported database
+
+## Quick Start
+Clone the repo and install dependencies:
+
+```bash
+git clone <repo-url> Restaurant-Menu
+cd Restaurant-Menu
+composer install
 ```
 
-## Installation
+Create the environment file and application key:
 
-1. Clone the repository
-2. Run `composer install`
-3. Run `npm install`
-4. Copy `.env.example` to `.env` and configure your environment
-5. Run `php artisan key:generate`
-6. Run `php artisan migrate`
-7. Run `npm run dev` for development or `npm run build` for production
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Usage
+If using SQLite (convenient for local testing):
 
-- Start the development server: `php artisan serve`
-- Build assets: `npm run build`
-- Run tests: `php artisan test`
+```bash
+php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
+```
 
-## Technologies Used
+Run migrations and optional seeders:
 
-- Laravel (PHP Framework)
-- React (Frontend Framework)
-- Inertia.js (SPA Framework)
-- Tailwind CSS (Styling)
-- Vite (Build Tool)
+```bash
+php artisan migrate --seed
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Install JS dependencies and build assets:
 
-## Security Vulnerabilities
+```bash
+npm install
+npm run build   # production
+# or for development
+npm run dev
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Start the application (development):
+
+```bash
+php artisan serve
+```
+
+The app should now be available at `http://127.0.0.1:8000` (or the URL shown by the serve command).
+
+## Useful Composer / NPM Scripts
+- `composer run setup` — runs initial composer + artisan + npm setup as defined in `composer.json`.
+- `composer test` — run application tests via `php artisan test`.
+- `npm run dev` — start Vite dev server.
+- `npm run build` — build production assets with Vite.
+
+## Configuration
+Edit the `.env` file to configure your database connection, mailer, and other credentials. Typical keys to set:
+
+- `APP_URL`
+- `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`
+- `MAIL_MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`
+
+For local development an SQLite DB is easiest (see Quick Start).
+
+## Testing
+Run the test suite with:
+
+```bash
+composer test
+# or
+php artisan test
+```
+
+## Important Files
+- `artisan` — Laravel CLI entry point
+- `composer.json` — PHP deps and scripts
+- `package.json` — frontend deps and scripts
+- `app/Http/Controllers/` — controllers
+- `resources/js/` — Inertia/React frontend
+- `resources/views/` — Blade templates
+- `generate_pdf.js` — PDF helper script
+
+## Deployment
+- Ensure `.env` is configured for production values.
+- Run migrations: `php artisan migrate --force`.
+- Build assets: `npm run build`.
+- Configure a process manager (supervisor) for queues if needed and a proper web server (Apache/Nginx + PHP-FPM).
+
+## Contributing
+Contributions are welcome. Please open issues for bugs or feature requests, and submit pull requests for changes.
 
 ## License
+This project is released under the MIT License (see `composer.json`).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-"# restaurant-menu" 
-"# Restaurant-Menu" 
+---
+
+If you'd like, I can also add example `.env` notes, update the repo README with badges, or generate a short developer checklist.
