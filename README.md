@@ -110,3 +110,18 @@ This project is released under the MIT License (see `composer.json`).
 ---
 
 If you'd like, I can also add example `.env` notes, update the repo README with badges, or generate a short developer checklist.
+
+---
+## Login account and Password
+
+superadmin@example.com    
+12345678
+
+subadmin@example.com   
+12345678
+
+admin4@gmail.com     
+12345678
+
+---
+
