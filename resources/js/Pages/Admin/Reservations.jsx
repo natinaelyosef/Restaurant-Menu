@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function Reservations({ reservations, userName, userRole }) {
+    const { t } = useTranslation();
     const [filter, setFilter] = useState('all');
     const [declineModal, setDeclineModal] = useState(null);
     const [declineNote, setDeclineNote] = useState('');
@@ -45,8 +47,8 @@ export default function Reservations({ reservations, userName, userRole }) {
     return (
         <AdminLayout title="Reservations" active="reservations">
             <div className="mb-6">
-                <h1 className="text-2xl font-bold text-gray-900">📅 Reservations</h1>
-                <p className="text-gray-600 mt-1">Approve or decline customer reservations</p>
+                <h1 className="text-2xl font-bold text-gray-900">{t('reservations')}</h1>
+                <p className="text-gray-600 mt-1">{t('approveOrDecline')}</p>
             </div>
 
             {/* Filter Tabs */}
@@ -62,7 +64,7 @@ export default function Reservations({ reservations, userName, userRole }) {
                                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             }`}
                         >
-                            {status === 'all' ? '📋 All' : `${statusIcons[status]} ${status.charAt(0).toUpperCase() + status.slice(1)}`}
+                            {status === 'all' ? t('all') : `${statusIcons[status]} ${status.charAt(0).toUpperCase() + status.slice(1)}`}
                             {status !== 'all' && (
                                 <span className="ml-1.5 bg-white/20 px-1.5 py-0.5 rounded-full text-xs">
                                     {reservations.filter((r) => r.status === status).length}
@@ -78,7 +80,7 @@ export default function Reservations({ reservations, userName, userRole }) {
                 {filtered.length === 0 ? (
                     <div className="p-12 text-center text-gray-500">
                         <span className="text-4xl block mb-4">📅</span>
-                        <p className="text-lg font-medium">No reservations found</p>
+                        <p className="text-lg font-medium">{t('noReservationsFound')}</p>
                         <p className="text-sm mt-1">
                             {filter !== 'all' ? `No ${filter} reservations` : 'No reservations have been made yet'}
                         </p>
@@ -88,12 +90,12 @@ export default function Reservations({ reservations, userName, userRole }) {
                         <table className="w-full">
                             <thead className="bg-gray-50">
                                 <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date & Time</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Guests</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Contact</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('customer')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('dateTime')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('guests')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('contact')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('status')}</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('actions')}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
@@ -129,13 +131,13 @@ export default function Reservations({ reservations, userName, userRole }) {
                                                         onClick={() => handleApprove(res.id)}
                                                         className="px-3 py-1.5 text-xs font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                                                     >
-                                                        ✅ Approve
+                                                        {t('approve')}
                                                     </button>
                                                     <button
                                                         onClick={() => { setDeclineModal(res.id); setDeclineNote(''); }}
                                                         className="px-3 py-1.5 text-xs font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                                                     >
-                                                        ❌ Decline
+                                                        {t('decline')}
                                                     </button>
                                                 </div>
                                             )}
@@ -157,8 +159,8 @@ export default function Reservations({ reservations, userName, userRole }) {
             {declineModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">❌ Decline Reservation</h3>
-                        <p className="text-sm text-gray-600 mb-4">Please provide a reason for declining this reservation.</p>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('declineReservation')}</h3>
+                        <p className="text-sm text-gray-600 mb-4">{t('declineReason')}</p>
                         <textarea
                             value={declineNote}
                             onChange={(e) => setDeclineNote(e.target.value)}
@@ -172,14 +174,14 @@ export default function Reservations({ reservations, userName, userRole }) {
                                 onClick={() => setDeclineModal(null)}
                                 className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
                             >
-                                Cancel
+                                {t('cancel')}
                             </button>
                             <button
                                 onClick={() => handleDecline(declineModal)}
                                 disabled={!declineNote.trim()}
                                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
                             >
-                                Confirm Decline
+                                {t('confirmDecline')}
                             </button>
                         </div>
                     </div>

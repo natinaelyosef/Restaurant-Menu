@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Head, router } from '@inertiajs/react';
+import { getMenuCategoryOptions, normalizeMenuCategory, formatMenuCategoryLabel } from '../utils/menuCategories';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function FoodItemForm({ menuItem }) {
+    const { t } = useTranslation();
     const isEditing = !!menuItem;
     
     const [formData, setFormData] = useState({
         name: '',
         description: '',
         price: '',
-        category: 'burgers',
+        category: 'appetizer',
         image: null,
     });
+    const categoryOptions = getMenuCategoryOptions().filter((option) => option.value !== 'all');
     
     const [imagePreview, setImagePreview] = useState('');
     const [errors, setErrors] = useState({});
@@ -31,7 +35,7 @@ export default function FoodItemForm({ menuItem }) {
                 name: menuItem.name || '',
                 description: menuItem.description || '',
                 price: menuItem.price || '',
-                category: menuItem.category || 'burgers',
+                category: normalizeMenuCategory(menuItem.category || 'burgers'),
                 image: null,
             });
             if (menuItem.image) {
@@ -90,7 +94,7 @@ export default function FoodItemForm({ menuItem }) {
 
     return (
         <>
-            <Head title={isEditing ? 'Edit Menu Item' : 'Add Menu Item'} />
+            <Head title={isEditing ? t('editMenuItem') : t('addMenuItem')} />
             
             <div className="min-h-screen bg-gray-50">
                 {/* Top Navigation Bar */}
@@ -107,10 +111,10 @@ export default function FoodItemForm({ menuItem }) {
                 <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div className="mb-6">
                         <h2 className="text-3xl font-bold text-gray-900 font-['Playfair_Display']">
-                            {isEditing ? 'Edit Menu Item' : 'Add New Menu Item'}
+                            {isEditing ? t('editMenuItem') : t('addNewMenuItem')}
                         </h2>
                         <p className="mt-1 text-sm text-gray-600">
-                            {isEditing ? 'Update the menu item details below.' : 'Fill in the details to add a new menu item.'}
+                            {isEditing ? t('editMenuItemDesc') : t('addNewMenuItemDesc')}
                         </p>
                     </div>
 
@@ -119,7 +123,7 @@ export default function FoodItemForm({ menuItem }) {
                             {/* Name */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Item Name *
+                                    {t('itemName')} *
                                 </label>
                                 <input
                                     type="text"
@@ -138,7 +142,7 @@ export default function FoodItemForm({ menuItem }) {
                             {/* Description */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Description
+                                    {t('description')}
                                 </label>
                                 <textarea
                                     name="description"
@@ -157,7 +161,7 @@ export default function FoodItemForm({ menuItem }) {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Price ($) *
+                                        {t('price')} *
                                     </label>
                                     <input
                                         type="number"
@@ -177,7 +181,7 @@ export default function FoodItemForm({ menuItem }) {
 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Category *
+                                        {t('category')} *
                                     </label>
                                     <select
                                         name="category"
@@ -188,10 +192,11 @@ export default function FoodItemForm({ menuItem }) {
                                         }`}
                                         required
                                     >
-                                        <option value="burgers">🍔 Burgers</option>
-                                        <option value="sides">🍟 Sides</option>
-                                        <option value="drinks">🥤 Drinks</option>
-                                        <option value="desserts">🍰 Desserts</option>
+                                        {categoryOptions.map((option) => (
+                                            <option key={option.value} value={option.value}>
+                                                {option.label}
+                                            </option>
+                                        ))}
                                     </select>
                                     {errors.category && <p className="mt-1 text-sm text-red-600">{errors.category}</p>}
                                 </div>
@@ -200,7 +205,7 @@ export default function FoodItemForm({ menuItem }) {
                             {/* Image Upload */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Item Image
+                                    {t('image')}
                                 </label>
                                 <input
                                     type="file"
@@ -229,7 +234,7 @@ export default function FoodItemForm({ menuItem }) {
                                 onClick={() => router.visit('/dashboard/menu-data')}
                                 className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
                             >
-                                Cancel
+                                {t('cancel')}
                             </button>
                             <button
                                 type="submit"
@@ -238,7 +243,7 @@ export default function FoodItemForm({ menuItem }) {
                                     isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
                                 }`}
                             >
-                                {isSubmitting ? 'Saving...' : (isEditing ? 'Update Item' : 'Create Item')}
+                                {isSubmitting ? t('saving') : (isEditing ? t('saveChanges') : t('addMenuItem'))}
                             </button>
                         </div>
                     </form>

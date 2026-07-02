@@ -15,6 +15,9 @@ class RestaurantSetting extends Model
         'name',
         'logo',
         'sections',
+        'background_type',
+        'background_image',
+        'background_video',
     ];
 
     protected $casts = [

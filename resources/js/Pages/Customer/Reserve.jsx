@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import useTranslation from '@/i18n/useTranslation';
 import { router } from '@inertiajs/react';
 import CustomerLayout from '@/Layouts/CustomerLayout';
 
 export default function Reserve({ userName, userEmail, errors: propErrors }) {
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         name: userName || '',
         email: userEmail || '',
@@ -56,8 +58,8 @@ export default function Reserve({ userName, userEmail, errors: propErrors }) {
     return (
         <CustomerLayout title="Make a Reservation" active="reserve">
             <div className="mb-6">
-                <h1 className="text-2xl font-bold text-gray-900">📅 Make a Reservation</h1>
-                <p className="text-gray-600 mt-1">Book a table for your next visit</p>
+                <h1 className="text-2xl font-bold text-gray-900">{t('makeReservation')}</h1>
+                <p className="text-gray-600 mt-1">{t('bookTableVisit')}</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -67,7 +69,7 @@ export default function Reserve({ userName, userEmail, errors: propErrors }) {
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('fullName')} *</label>
                                     <input
                                         type="text"
                                         value={formData.name}
@@ -78,7 +80,7 @@ export default function Reserve({ userName, userEmail, errors: propErrors }) {
                                     {formErrors.name && <p className="text-red-500 text-xs mt-1">{formErrors.name}</p>}
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('emailAddress')} *</label>
                                     <input
                                         type="email"
                                         value={formData.email}
@@ -91,19 +93,19 @@ export default function Reserve({ userName, userEmail, errors: propErrors }) {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('phoneNumber')}</label>
                                 <input
                                     type="text"
                                     value={formData.phone}
                                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="Optional"
+                                    placeholder={t('optional')}
                                 />
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Date *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('date')} *</label>
                                     <input
                                         type="date"
                                         value={formData.reservation_date}
@@ -115,7 +117,7 @@ export default function Reserve({ userName, userEmail, errors: propErrors }) {
                                     {formErrors.reservation_date && <p className="text-red-500 text-xs mt-1">{formErrors.reservation_date}</p>}
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Number of Guests *</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('numberOfGuests')} *</label>
                                     <input
                                         type="number"
                                         min="1"
@@ -132,13 +134,13 @@ export default function Reserve({ userName, userEmail, errors: propErrors }) {
                             {/* Time Slots */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Select Time *
-                                    {loadingTimes && <span className="ml-2 text-blue-500 text-xs">(Loading available times...)</span>}
+                                    {t('selectTime')} *
+                                    {loadingTimes && <span className="ml-2 text-blue-500 text-xs">({t('loadingAvailableTimes')})</span>}
                                 </label>
 
                                 {!formData.reservation_date ? (
                                     <div className="bg-gray-50 rounded-lg p-4 text-center text-gray-500 text-sm">
-                                        Please select a date first to see available times
+                                        {t('selectDateFirst')}
                                     </div>
                                 ) : (
                                     <>
@@ -146,7 +148,7 @@ export default function Reserve({ userName, userEmail, errors: propErrors }) {
                                         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
                                             {availableTimes.length === 0 && !loadingTimes ? (
                                                 <p className="col-span-full text-center text-gray-500 text-sm py-4">
-                                                    No available time slots for this date. Please choose another date.
+                                                    {t('noTimeSlots')}
                                                 </p>
                                             ) : (
                                                 availableTimes.map((time) => (
@@ -175,13 +177,13 @@ export default function Reserve({ userName, userEmail, errors: propErrors }) {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Special Requests</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('specialRequests')}</label>
                                 <textarea
                                     value={formData.special_requests}
                                     onChange={(e) => setFormData({ ...formData, special_requests: e.target.value })}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     rows="3"
-                                    placeholder="Any special requests or dietary requirements..."
+                                    placeholder={t('specialRequestsPlaceholder')}
                                 />
                             </div>
 
@@ -189,7 +191,7 @@ export default function Reserve({ userName, userEmail, errors: propErrors }) {
                                 type="submit"
                                 className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-lg"
                             >
-                                Submit Reservation
+                                {t('submitReservation')}
                             </button>
                         </form>
                     </div>
@@ -198,21 +200,21 @@ export default function Reserve({ userName, userEmail, errors: propErrors }) {
                 {/* Sidebar Info */}
                 <div className="space-y-6">
                     <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
-                        <h4 className="font-semibold text-blue-900 mb-2">📋 Reservation Info</h4>
+                        <h4 className="font-semibold text-blue-900 mb-2">{t('reservationInfo')}</h4>
                         <ul className="text-sm text-blue-700 space-y-2">
-                            <li>• Reservations are subject to approval</li>
-                            <li>• You can cancel your reservation anytime</li>
-                            <li>• Available times are shown in real-time</li>
-                            <li>• Maximum 50 guests per reservation</li>
+                            <li>{t('reservationInfo1')}</li>
+                            <li>{t('reservationInfo2')}</li>
+                            <li>{t('reservationInfo3')}</li>
+                            <li>{t('reservationInfo4')}</li>
                         </ul>
                     </div>
 
                     <div className="bg-green-50 border border-green-200 rounded-xl p-5">
-                        <h4 className="font-semibold text-green-900 mb-2">🕐 Operating Hours</h4>
+                        <h4 className="font-semibold text-green-900 mb-2">{t('operatingHours')}</h4>
                         <ul className="text-sm text-green-700 space-y-1">
-                            <li>Monday - Friday: 9:00 AM - 9:00 PM</li>
-                            <li>Saturday: 10:00 AM - 10:00 PM</li>
-                            <li>Sunday: 10:00 AM - 8:00 PM</li>
+                            <li>{t('mondayFriday')}</li>
+                            <li>{t('saturday')}</li>
+                            <li>{t('sunday')}</li>
                         </ul>
                     </div>
                 </div>

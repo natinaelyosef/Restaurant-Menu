@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import useTranslation from '@/i18n/useTranslation';
 import { usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 
 export default function SubAdmins({ subAdmins }) {
+    const { t } = useTranslation();
     const { flash } = usePage().props;
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -91,7 +93,7 @@ export default function SubAdmins({ subAdmins }) {
         setErrors({});
 
         if (passwordData.password !== passwordData.password_confirmation) {
-            setErrors({ password: 'Passwords do not match' });
+            setErrors({ password: t('passwordsDoNotMatch') });
             setProcessing(false);
             return;
         }
@@ -153,14 +155,14 @@ export default function SubAdmins({ subAdmins }) {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Sub-Admin Management</h1>
-                    <p className="text-gray-600 mt-1">Create, manage, and control sub-admin accounts</p>
+                    <h1 className="text-2xl font-bold text-gray-900">{t('subAdminManagement')}</h1>
+                    <p className="text-gray-600 mt-1">{t('createManageControl')}</p>
                 </div>
                 <button
                     onClick={openCreateModal}
                     className="mt-4 sm:mt-0 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium shadow-sm flex items-center gap-2"
                 >
-                    <span>➕</span> Add New Sub-Admin
+                    <span>➕</span> {t('addNewSubAdmin')}
                 </button>
             </div>
 
@@ -171,11 +173,11 @@ export default function SubAdmins({ subAdmins }) {
                         <table className="w-full">
                             <thead className="bg-gray-50 border-b border-gray-200">
                                 <tr>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-600">Name</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-600">Email</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-600">Status</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-600">Created</th>
-                                    <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Actions</th>
+                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-600">{t('name')}</th>
+                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-600">{t('emailAddress')}</th>
+                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-600">{t('status')}</th>
+                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-600">{t('created')}</th>
+                                    <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">{t('actions')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -207,14 +209,14 @@ export default function SubAdmins({ subAdmins }) {
                                                             className="px-3 py-1.5 text-xs font-medium text-yellow-700 bg-yellow-50 border border-yellow-200 rounded-md hover:bg-yellow-100 transition-colors"
                                                             title="Suspend account"
                                                         >
-                                                            ⏸️ Suspend
+                                                            {t('suspend')}
                                                         </button>
                                                         <button
                                                             onClick={() => handleBan(admin)}
                                                             className="px-3 py-1.5 text-xs font-medium text-red-700 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 transition-colors"
                                                             title="Ban account"
                                                         >
-                                                            🚫 Ban
+                                                            {t('banned')}
                                                         </button>
                                                     </>
                                                 )}
@@ -224,7 +226,7 @@ export default function SubAdmins({ subAdmins }) {
                                                         className="px-3 py-1.5 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-md hover:bg-green-100 transition-colors"
                                                         title="Activate account"
                                                     >
-                                                        ✅ Activate
+                                                        {t('activate')}
                                                     </button>
                                                 )}
                                                 <button
@@ -232,21 +234,21 @@ export default function SubAdmins({ subAdmins }) {
                                                     className="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors"
                                                     title="Reset password"
                                                 >
-                                                    🔑 Reset PW
+                                                    {t('resetPW')}
                                                 </button>
                                                 <button
                                                     onClick={() => openEditModal(admin)}
                                                     className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-md hover:bg-gray-100 transition-colors"
                                                     title="Edit details"
                                                 >
-                                                    ✏️ Edit
+                                                    {t('edit')}
                                                 </button>
                                                 <button
                                                     onClick={() => openDeleteModal(admin)}
                                                     className="px-3 py-1.5 text-xs font-medium text-red-700 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 transition-colors"
                                                     title="Delete account"
                                                 >
-                                                    🗑️ Delete
+                                                    {t('delete')}
                                                 </button>
                                             </div>
                                         </td>
@@ -258,13 +260,13 @@ export default function SubAdmins({ subAdmins }) {
                 ) : (
                     <div className="text-center py-12">
                         <p className="text-4xl mb-4">👥</p>
-                        <p className="text-lg font-medium text-gray-900 mb-2">No Sub-Admins Yet</p>
-                        <p className="text-gray-500 mb-4">Create your first sub-admin to start managing your team.</p>
+                        <p className="text-lg font-medium text-gray-900 mb-2">{t('noSubAdminsYet')}</p>
+                        <p className="text-gray-500 mb-4">{t('createFirstSubAdmin')}</p>
                         <button
                             onClick={openCreateModal}
                             className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
                         >
-                            Add Sub-Admin
+                            {t('addSubAdmin')}
                         </button>
                     </div>
                 )}
@@ -272,10 +274,10 @@ export default function SubAdmins({ subAdmins }) {
 
             {/* Create Modal */}
             {showCreateModal && (
-                <Modal title="Create New Sub-Admin" onClose={() => setShowCreateModal(false)}>
+                <Modal title={t('createSubAdminAccount')} onClose={() => setShowCreateModal(false)}>
                     <form onSubmit={handleCreate} className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('fullName')}</label>
                             <input
                                 type="text"
                                 value={formData.name}
@@ -286,7 +288,7 @@ export default function SubAdmins({ subAdmins }) {
                             {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Email (Login Name)</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('emailLoginName')}</label>
                             <input
                                 type="email"
                                 value={formData.email}
@@ -297,7 +299,7 @@ export default function SubAdmins({ subAdmins }) {
                             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('password')}</label>
                             <input
                                 type="password"
                                 value={formData.password}
@@ -309,9 +311,9 @@ export default function SubAdmins({ subAdmins }) {
                             {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                         </div>
                         <div className="flex justify-end gap-3 pt-4">
-                            <button type="button" onClick={() => setShowCreateModal(false)} className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">Cancel</button>
+                            <button type="button" onClick={() => setShowCreateModal(false)} className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">{t('cancel')}</button>
                             <button type="submit" disabled={processing} className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50">
-                                {processing ? 'Creating...' : 'Create Sub-Admin'}
+                                {processing ? t('creating') : t('createSubAdmin')}
                             </button>
                         </div>
                     </form>
@@ -320,10 +322,10 @@ export default function SubAdmins({ subAdmins }) {
 
             {/* Edit Modal */}
             {showEditModal && (
-                <Modal title="Edit Sub-Admin" onClose={() => setShowEditModal(false)}>
+                <Modal title={t('editSubAdmin')} onClose={() => setShowEditModal(false)}>
                     <form onSubmit={handleUpdate} className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('fullName')}</label>
                             <input
                                 type="text"
                                 value={formData.name}
@@ -334,7 +336,7 @@ export default function SubAdmins({ subAdmins }) {
                             {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('emailAddress')}</label>
                             <input
                                 type="email"
                                 value={formData.email}
@@ -345,9 +347,9 @@ export default function SubAdmins({ subAdmins }) {
                             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                         </div>
                         <div className="flex justify-end gap-3 pt-4">
-                            <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">Cancel</button>
+                            <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">{t('cancel')}</button>
                             <button type="submit" disabled={processing} className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50">
-                                {processing ? 'Saving...' : 'Save Changes'}
+                                {processing ? t('saving') : t('saveChanges')}
                             </button>
                         </div>
                     </form>
@@ -356,13 +358,13 @@ export default function SubAdmins({ subAdmins }) {
 
             {/* Reset Password Modal */}
             {showPasswordModal && (
-                <Modal title={`Reset Password for ${selectedAdmin?.name}`} onClose={() => setShowPasswordModal(false)}>
+                <Modal title={`${t('resetPasswordFor')} ${selectedAdmin?.name}`} onClose={() => setShowPasswordModal(false)}>
                     <form onSubmit={handleResetPassword} className="space-y-4">
                         <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg text-sm">
                             ⚠️ This will set a new password for {selectedAdmin?.email}. Share the new password with them securely.
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('newPassword')}</label>
                             <input
                                 type="password"
                                 value={passwordData.password}
@@ -373,7 +375,7 @@ export default function SubAdmins({ subAdmins }) {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('confirmNewPassword')}</label>
                             <input
                                 type="password"
                                 value={passwordData.password_confirmation}
@@ -385,9 +387,9 @@ export default function SubAdmins({ subAdmins }) {
                         </div>
                         {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
                         <div className="flex justify-end gap-3 pt-4">
-                            <button type="button" onClick={() => setShowPasswordModal(false)} className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">Cancel</button>
+                            <button type="button" onClick={() => setShowPasswordModal(false)} className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">{t('cancel')}</button>
                             <button type="submit" disabled={processing} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
-                                {processing ? 'Resetting...' : 'Reset Password'}
+                                {processing ? t('resetting') : t('resetPassword')}
                             </button>
                         </div>
                     </form>
@@ -396,16 +398,16 @@ export default function SubAdmins({ subAdmins }) {
 
             {/* Delete Confirmation Modal */}
             {showDeleteModal && (
-                <Modal title="Delete Sub-Admin" onClose={() => setShowDeleteModal(false)}>
+                <Modal title={t('deleteSubAdmin')} onClose={() => setShowDeleteModal(false)}>
                     <div className="space-y-4">
                         <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
-                            ⚠️ <strong>Warning:</strong> This action cannot be undone. The sub-admin account for <strong>{selectedAdmin?.name}</strong> will be permanently deleted.
+                            {t('warningCannotUndo')} <strong>{selectedAdmin?.name}</strong>{t('willBePermanentlyDeleted')}
                         </div>
-                        <p className="text-gray-600">Are you sure you want to proceed?</p>
+                        <p className="text-gray-600">{t('suspendConfirm')}</p>
                         <div className="flex justify-end gap-3 pt-4">
-                            <button type="button" onClick={() => setShowDeleteModal(false)} className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">Cancel</button>
+                            <button type="button" onClick={() => setShowDeleteModal(false)} className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">{t('cancel')}</button>
                             <button onClick={handleDelete} disabled={processing} className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50">
-                                {processing ? 'Deleting...' : 'Yes, Delete'}
+                                {processing ? t('deleting') : t('yesDelete')}
                             </button>
                         </div>
                     </div>

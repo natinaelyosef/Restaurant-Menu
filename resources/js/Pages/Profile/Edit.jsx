@@ -3,10 +3,12 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import CustomerLayout from '@/Layouts/CustomerLayout';
 import { Head, usePage } from '@inertiajs/react';
 import DeleteUserForm from './Partials/DeleteUserForm';
+import useTranslation from '@/i18n/useTranslation';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 
 export default function Edit({ mustVerifyEmail, status }) {
+    const { t } = useTranslation();
     const { auth } = usePage().props;
     const user = auth?.user;
 
@@ -38,8 +40,8 @@ export default function Edit({ mustVerifyEmail, status }) {
         return (
             <AdminLayout title="Profile Settings" active="profile">
                 <div className="mb-6">
-                    <h1 className="text-2xl font-bold text-gray-900">👤 Profile Settings</h1>
-                    <p className="text-gray-600 mt-1">Update your account's name, email, and password</p>
+                    <h1 className="text-2xl font-bold text-gray-900">{t('profileSettings')}</h1>
+                    <p className="text-gray-600 mt-1">{t('updateProfileInfo')}</p>
                 </div>
                 {renderContent()}
             </AdminLayout>
@@ -50,8 +52,8 @@ export default function Edit({ mustVerifyEmail, status }) {
         return (
             <CustomerLayout title="Profile Settings" active="profile">
                 <div className="mb-6">
-                    <h1 className="text-2xl font-bold text-gray-900">👤 Profile Settings</h1>
-                    <p className="text-gray-600 mt-1">Update your account's name, email, and password</p>
+                    <h1 className="text-2xl font-bold text-gray-900">{t('profileSettings')}</h1>
+                    <p className="text-gray-600 mt-1">{t('updateProfileInfo')}</p>
                 </div>
                 {renderContent()}
             </CustomerLayout>
@@ -62,7 +64,7 @@ export default function Edit({ mustVerifyEmail, status }) {
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Profile Settings
+                    {t('profileSettings')}
                 </h2>
             }
         >

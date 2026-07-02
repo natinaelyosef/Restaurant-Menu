@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -29,8 +31,17 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $locale = $request->session()->get('locale', Config::get('app.locale'));
+        if (!in_array($locale, array_keys(Config::get('locale.supported', [Config::get('app.locale')])))) {
+            $locale = Config::get('app.locale');
+        }
+
+        App::setLocale($locale);
+
         return [
             ...parent::share($request),
+            'locale' => $locale,
+            'supportedLocales' => Config::get('locale.supported', [Config::get('app.locale')]),
             'auth' => [
                 'user' => $request->user()
                     ? [

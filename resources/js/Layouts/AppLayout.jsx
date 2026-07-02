@@ -1,21 +1,24 @@
 // resources/js/Layouts/AppLayout.jsx
 import React, { useEffect } from 'react';
 import { Link, router } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
 import { useTheme } from '@/Contexts/ThemeContext';
 import { route } from 'ziggy-js';
+import LanguageSwitcher from '@/Components/LanguageSwitcher';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function AppLayout({ children, auth }) {
     useEffect(() => {
         try {
             if (!auth?.user) {
-                Inertia.visit('/login', { replace: true });
+                router.visit('/login', { replace: true });
             }
         } catch (e) {
             // ignore
         }
     }, [auth]);
     const { darkMode, setDarkMode } = useTheme();
+
+    const { t } = useTranslation();
 
     const toggleTheme = () => {
         setDarkMode(!darkMode);
@@ -54,27 +57,27 @@ export default function AppLayout({ children, auth }) {
                         <input 
                             type="text" 
                             id="headerSearch" 
-                            placeholder="Search books, authors, genres…"
+                            placeholder={t('searchPlaceholder')}
                             onKeyPress={handleSearch}
                         />
                         <button 
                             className="search-btn"
                             onClick={handleSearchClick}
-                        >Search</button>
+                        >{t('search')}</button>
                     </div>
 
                     <nav className="nav-right">
                         <Link href="/" className="nav-btn">
-                            <i className="bi bi-house"></i> Home
+                            <i className="bi bi-house"></i> {t('home')}
                         </Link>
                         <Link href="/stores" className="nav-btn">
-                            <i className="bi bi-shop"></i> Stores
+                            <i className="bi bi-shop"></i> {t('stores')}
                         </Link>
                         <Link href={auth?.user ? "/my-books" : "/login"} className="nav-btn">
-                            <i className="bi bi-book-open"></i> My Books
+                            <i className="bi bi-book-open"></i> {t('myBooks')}
                         </Link>
                         <Link href="/contact" className="nav-btn">
-                            <i className="bi bi-envelope"></i> Contact
+                            <i className="bi bi-envelope"></i> {t('contact')}
                         </Link>
 
                         <div style={{width:'1px',height:'22px',background:'var(--border)',margin:'0 0.2rem'}}></div>
@@ -87,26 +90,27 @@ export default function AppLayout({ children, auth }) {
                         {auth?.user ? (
                             <>
                                 <Link href={auth.user.role === 'store_owner' ? '/store/dashboard' : '/customer/dashboard'} className="nav-pill">
-                                    <i className="bi bi-person-circle"></i> Dashboard
+                                    <i className="bi bi-person-circle"></i> {t('dashboard')}
                                 </Link>
                                 <button 
                                     onClick={handleLogout}
                                     className="nav-pill nav-pill-outline"
                                     style={{ cursor: 'pointer' }}
                                 >
-                                    <i className="bi bi-box-arrow-right"></i> Logout
+                                    <i className="bi bi-box-arrow-right"></i> {t('logout')}
                                 </button>
                             </>
                         ) : (
                             <>
-                                <Link href="/login" className="nav-pill nav-pill-outline">Login</Link>
+                                <Link href="/login" className="nav-pill nav-pill-outline">{t('login')}</Link>
                                 <Link href="/register" className="nav-pill">
-                                    <i className="bi bi-person-plus"></i> Register
+                                    <i className="bi bi-person-plus"></i> {t('register')}
                                 </Link>
                             </>
                         )}
                         
-                        <button className="theme-btn" onClick={toggleTheme} aria-label="Toggle theme">
+                        <LanguageSwitcher />
+                        <button className="theme-btn" onClick={toggleTheme} aria-label={t('toggleTheme')}>
                             <i className={darkMode ? "bi bi-moon-stars-fill" : "bi bi-sun-fill"}></i>
                         </button>
                         <button className="mob-menu-btn"><i className="bi bi-list"></i></button>

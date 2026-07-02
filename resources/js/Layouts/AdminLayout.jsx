@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Head, Link, usePage, router } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
+import LanguageSwitcher from '@/Components/LanguageSwitcher';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function AdminLayout({ title = 'Admin Dashboard', active = 'dashboard', children, fullWidth = false }) {
     const { auth, flash } = usePage().props;
     const user = auth?.user ?? { name: 'Admin', email: '', role: 'sub_admin' };
+    const { t } = useTranslation();
     useEffect(() => {
         try {
             if (!auth?.user) {
-                Inertia.visit('/login', { replace: true });
+                router.visit('/login', { replace: true });
             }
         } catch (e) {
             // ignore
@@ -21,25 +23,25 @@ export default function AdminLayout({ title = 'Admin Dashboard', active = 'dashb
 
     // Build navigation links based on role - exact order as per requirements
     // Sub-Admin: Dashboard, Change Password, Manage Menu, Menu Data, Orders, Reservations, Settings
-    // Super-Admin: Manage Menu, Menu Data, Orders, Reservations, Settings, Dashboard, Change Password
+    // Super-Admin: Dashboard, Manage Menu, Menu Data, Orders, Reservations, Settings, Change Password
     const navLinks = isSuperAdmin
         ? [
-            { key: 'manage-menu', name: 'Manage Menu', href: '/admin/manage-menu', icon: '🍽️' },
-            { key: 'menu-data', name: 'Menu Data', href: '/admin/menu-data', icon: '📋' },
-            { key: 'orders', name: 'Orders', href: '/admin/orders', icon: '🛒' },
-            { key: 'reservations', name: 'Reservations', href: '/admin/reservations', icon: '📅' },
-            { key: 'settings', name: 'Settings', href: '/admin/settings', icon: '⚙️' },
-            { key: 'dashboard', name: 'Dashboard', href: '/super/dashboard', icon: '📊' },
-            { key: 'change-password', name: 'Change Password', href: '/super/change-password', icon: '🔑' },
+            { key: 'dashboard', name: t('dashboard'), href: '/super/dashboard', icon: '📊' },
+            { key: 'manage-menu', name: t('manageMenu'), href: '/admin/manage-menu', icon: '🍽️' },
+            { key: 'menu-data', name: t('menuData'), href: '/admin/menu-data', icon: '📋' },
+            { key: 'orders', name: t('orders'), href: '/admin/orders', icon: '🛒' },
+            { key: 'reservations', name: t('reservations'), href: '/admin/reservations', icon: '📅' },
+            { key: 'settings', name: t('settings'), href: '/admin/settings', icon: '⚙️' },
+            { key: 'change-password', name: t('changePassword'), href: '/super/change-password', icon: '🔑' },
         ]
         : [
-            { key: 'dashboard', name: 'Dashboard', href: '/sub/dashboard', icon: '🏠' },
-            { key: 'change-password', name: 'Change Password', href: '/sub/change-password', icon: '🔑' },
-            { key: 'manage-menu', name: 'Manage Menu', href: '/admin/manage-menu', icon: '🍽️' },
-            { key: 'menu-data', name: 'Menu Data', href: '/admin/menu-data', icon: '📋' },
-            { key: 'orders', name: 'Orders', href: '/admin/orders', icon: '🛒' },
-            { key: 'reservations', name: 'Reservations', href: '/admin/reservations', icon: '📅' },
-            { key: 'settings', name: 'Settings', href: '/admin/settings', icon: '⚙️' },
+            { key: 'dashboard', name: t('dashboard'), href: '/sub/dashboard', icon: '🏠' },
+            { key: 'change-password', name: t('changePassword'), href: '/sub/change-password', icon: '🔑' },
+            { key: 'manage-menu', name: t('manageMenu'), href: '/admin/manage-menu', icon: '🍽️' },
+            { key: 'menu-data', name: t('menuData'), href: '/admin/menu-data', icon: '📋' },
+            { key: 'orders', name: t('orders'), href: '/admin/orders', icon: '🛒' },
+            { key: 'reservations', name: t('reservations'), href: '/admin/reservations', icon: '📅' },
+            { key: 'settings', name: t('settings'), href: '/admin/settings', icon: '⚙️' },
         ];
 
     // Super Admin gets extra link
@@ -64,8 +66,8 @@ export default function AdminLayout({ title = 'Admin Dashboard', active = 'dashb
     const activeColor = isSuperAdmin ? 'bg-purple-600 text-white' : 'bg-teal-600 text-white';
     const accentBg = isSuperAdmin ? 'bg-yellow-500' : 'bg-white';
     const accentText = isSuperAdmin ? 'text-purple-900' : 'text-teal-700';
-    const roleLabel = isSuperAdmin ? 'Super Administrator' : 'Sub Administrator';
-    const panelName = isSuperAdmin ? 'Super Admin Panel' : 'Sub Admin Panel';
+    const roleLabel = isSuperAdmin ? t('superAdminPanel') : t('subAdminPanel');
+    const panelName = isSuperAdmin ? t('superAdminPanel') : t('subAdminPanel');
     const panelIcon = isSuperAdmin ? '🛡️' : '⚡';
 
     return (
@@ -106,6 +108,9 @@ export default function AdminLayout({ title = 'Admin Dashboard', active = 'dashb
                     </div>
                 </div>
 
+                <div className="flex items-center md:me-4">
+                    <LanguageSwitcher />
+                </div>
                 <div className="relative">
                     <button
                         type="button"

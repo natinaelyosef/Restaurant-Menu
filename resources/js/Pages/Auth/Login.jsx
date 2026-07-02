@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Checkbox from '@/Components/Checkbox';
 import InputError from '@/Components/InputError';
 import { Head, Link, useForm } from '@inertiajs/react';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -11,6 +12,7 @@ export default function Login({ status, canResetPassword }) {
     });
 
     const [showPassword, setShowPassword] = useState(false);
+    const { t } = useTranslation();
 
     const submit = (e) => {
         e.preventDefault();
@@ -606,7 +608,7 @@ export default function Login({ status, canResetPassword }) {
 
     return (
         <>
-            <Head title="Log in" />
+            <Head title={t('logIn')} />
             
             <div className="auth-container">
                 <div className="auth-bg-pattern"></div>
@@ -615,7 +617,7 @@ export default function Login({ status, canResetPassword }) {
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
-                    Back to Home
+                    {t('backToHome')}
                 </Link>
 
                 <div className="auth-card">
@@ -624,30 +626,27 @@ export default function Login({ status, canResetPassword }) {
                         <Link href="/" className="brand-logo">
                             <span className="brand-logo-icon">🍔</span>
                             <div>
-                                <span className="brand-logo-text">Resturant Sign In</span>
+                                <span className="brand-logo-text">{t('signInTitle')}</span>
                               
                             </div>
                         </Link>
 
                         <div className="brand-content">
-                            <div className="brand-badge">🔥 Premium Dining</div>
-                            <h1 className="brand-title">
-                                Welcome <br />
-                                <span className="accent">Back!</span>
-                            </h1>
+                            <div className="brand-badge">{t('premiumDining')}</div>
+                            <h1 className="brand-title">{t('welcomeBack')}</h1>
                             <p className="brand-desc">
-                                Log in to access your dashboard, manage reservations, and explore our exclusive menu offerings.
+                                {t('loginDescription')}
                             </p>
                         </div>
 
                         <div className="brand-stats">
                             <div>
                                 <div className="brand-stat-num">50+</div>
-                                <div className="brand-stat-label">Menu Items</div>
+                                <div className="brand-stat-label">{t('menuItems')}</div>
                             </div>
                             <div>
                                 <div className="brand-stat-num">15</div>
-                                <div className="brand-stat-label">Years Exp</div>
+                                <div className="brand-stat-label">{t('yearsExp')}</div>
                             </div>
                             <div>
                                 <div className="brand-stat-num">98%</div>
@@ -659,8 +658,8 @@ export default function Login({ status, canResetPassword }) {
                     {/* Right Side - Form */}
                     <div className="auth-form-wrapper">
                         <div className="form-header">
-                            <h2 className="form-title">Sign In</h2>
-                            <p className="form-subtitle">Enter your credentials to access your account</p>
+                            <h2 className="form-title">{t('signInTitle')}</h2>
+                            <p className="form-subtitle">{t('signInSubtitle')}</p>
                         </div>
 
                         {status && (
@@ -675,7 +674,7 @@ export default function Login({ status, canResetPassword }) {
 
                         <form onSubmit={submit}>
                             <div className="input-group">
-                                <label className="input-label" htmlFor="email">Email Address</label>
+                                <label className="input-label" htmlFor="email">{t('emailAddress')}</label>
                                 <div className="input-wrapper">
                                     <input
                                         id="email"
@@ -694,7 +693,7 @@ export default function Login({ status, canResetPassword }) {
                             </div>
 
                             <div className="input-group">
-                                <label className="input-label" htmlFor="password">Password</label>
+                                <label className="input-label" htmlFor="password">{t('password')}</label>
                                 <div className="input-wrapper">
                                     <input
                                         id="password"
@@ -735,12 +734,12 @@ export default function Login({ status, canResetPassword }) {
                                         onChange={(e) => setData('remember', e.target.checked)}
                                         style={{ display: 'none' }}
                                     />
-                                    <span className="checkbox-label">Remember me</span>
+                                    <span className="checkbox-label">{t('rememberMe')}</span>
                                 </label>
 
                                 {canResetPassword && (
                                     <Link href={route('password.request')} className="forgot-link">
-                                        Forgot password?
+                                        {t('forgotPassword')}
                                     </Link>
                                 )}
                             </div>
@@ -752,11 +751,11 @@ export default function Login({ status, canResetPassword }) {
                                             <circle cx="12" cy="12" r="10" strokeOpacity="0.25"/>
                                             <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/>
                                         </svg>
-                                        Signing In...
+                                        {t('signingIn')}
                                     </>
                                 ) : (
                                     <>
-                                        Sign In
+                                        {t('signIn')}
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M5 12h14M12 5l7 7-7 7"/>
                                         </svg>
@@ -765,7 +764,7 @@ export default function Login({ status, canResetPassword }) {
                             </button>
                         </form>
 
-                        <div className="divider">Or continue with</div>
+                        <div className="divider">{t('orContinueWith')}</div>
 
                         <a href={route('auth.google')} className="btn-google">
                             <svg width="20" height="20" viewBox="0 0 24 24">
@@ -774,13 +773,13 @@ export default function Login({ status, canResetPassword }) {
                                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                             </svg>
-                            Continue with Google
+                            {t('continueWithGoogle')}
                         </a>
 
                         <div className="register-prompt">
-                            Don't have an account?
+                            {t('dontHaveAccount')}
                             <Link href={route('register')} className="register-link">
-                                Create Account
+                                {t('createAccount')}
                             </Link>
                         </div>
                     </div>

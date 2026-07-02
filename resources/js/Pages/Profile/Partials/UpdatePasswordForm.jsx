@@ -4,11 +4,13 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
+import useTranslation from '@/i18n/useTranslation';
 import { useRef } from 'react';
 
 export default function UpdatePasswordForm({ className = '' }) {
     const passwordInput = useRef();
     const currentPasswordInput = useRef();
+    const { t } = useTranslation();
 
     const {
         data,
@@ -48,12 +50,11 @@ export default function UpdatePasswordForm({ className = '' }) {
         <section className={className}>
             <header>
                 <h2 className="text-lg font-medium text-gray-900">
-                    Update Password
+                    {t('changePassword')}
                 </h2>
 
                 <p className="mt-1 text-sm text-gray-600">
-                    Ensure your account is using a long, random password to stay
-                    secure.
+                    {t('ensureAccountSecurity')}
                 </p>
             </header>
 
@@ -61,7 +62,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                 <div>
                     <InputLabel
                         htmlFor="current_password"
-                        value="Current Password"
+                        value={t('currentPassword')}
                     />
 
                     <TextInput
@@ -83,7 +84,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="password" value="New Password" />
+                    <InputLabel htmlFor="password" value={t('newPassword')} />
 
                     <TextInput
                         id="password"
@@ -101,7 +102,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                 <div>
                     <InputLabel
                         htmlFor="password_confirmation"
-                        value="Confirm Password"
+                        value={t('confirmPassword')}
                     />
 
                     <TextInput
@@ -122,7 +123,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+                    <PrimaryButton disabled={processing}>{t('saveChanges')}</PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}
@@ -132,7 +133,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                         leaveTo="opacity-0"
                     >
                         <p className="text-sm text-gray-600">
-                            Saved.
+                            {t('saved')}
                         </p>
                     </Transition>
                 </div>

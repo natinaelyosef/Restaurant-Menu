@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function ChangePassword() {
+    const { t } = useTranslation();
     const { flash } = usePage().props;
     const [formData, setFormData] = useState({
         current_password: '',
@@ -37,8 +39,8 @@ export default function ChangePassword() {
             <div className="max-w-2xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-2xl font-bold text-gray-900">Change Password</h1>
-                    <p className="text-gray-600 mt-1">Update your login password to keep your account secure.</p>
+                    <h1 className="text-2xl font-bold text-gray-900">{t('changePassword')}</h1>
+                    <p className="text-gray-600 mt-1">{t('updateLoginPassword')}</p>
                 </div>
 
                 {/* Success Message */}
@@ -61,7 +63,7 @@ export default function ChangePassword() {
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Current Password
+                                {t('currentPassword')}
                             </label>
                             <input
                                 type="password"
@@ -76,11 +78,11 @@ export default function ChangePassword() {
                         </div>
 
                         <div className="border-t border-gray-200 pt-6">
-                            <h3 className="text-sm font-medium text-gray-700 mb-4">New Password</h3>
+                            <h3 className="text-sm font-medium text-gray-700 mb-4">{t('newPassword')}</h3>
                             <div className="space-y-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        New Password
+                                        {t('newPassword')}
                                     </label>
                                     <input
                                         type="password"
@@ -98,7 +100,7 @@ export default function ChangePassword() {
 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Confirm New Password
+                                        {t('confirmNewPassword')}
                                     </label>
                                     <input
                                         type="password"
@@ -118,7 +120,7 @@ export default function ChangePassword() {
                                 disabled={processing}
                                 className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium disabled:opacity-50 shadow-sm"
                             >
-                                {processing ? 'Updating...' : 'Update Password'}
+                                {processing ? t('saving') : t('changePassword')}
                             </button>
                         </div>
                     </form>

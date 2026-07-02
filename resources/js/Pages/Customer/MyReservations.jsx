@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import useTranslation from '@/i18n/useTranslation';
 import { router } from '@inertiajs/react';
 import CustomerLayout from '@/Layouts/CustomerLayout';
 
 export default function MyReservations({ reservations, userName }) {
+    const { t } = useTranslation();
     const [filter, setFilter] = useState('all');
 
     const statusColors = {
@@ -33,14 +35,14 @@ export default function MyReservations({ reservations, userName }) {
         <CustomerLayout title="My Reservations" active="my-reservations">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">📋 My Reservations</h1>
-                    <p className="text-gray-600 mt-1">View and manage your reservations</p>
+                    <h1 className="text-2xl font-bold text-gray-900">{t('myReservations')}</h1>
+                    <p className="text-gray-600 mt-1">{t('viewManageBookings')}</p>
                 </div>
                 <a
                     href="/customer/reserve"
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                    + New Reservation
+                    {t('newReservation')}
                 </a>
             </div>
 
@@ -57,7 +59,7 @@ export default function MyReservations({ reservations, userName }) {
                                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             }`}
                         >
-                            {status === 'all' ? '📋 All' : `${statusIcons[status]} ${status.charAt(0).toUpperCase() + status.slice(1)}`}
+                            {status === 'all' ? `📋 ${t('all')}` : `${statusIcons[status]} ${status.charAt(0).toUpperCase() + status.slice(1)}`}
                         </button>
                     ))}
                 </div>
@@ -67,15 +69,15 @@ export default function MyReservations({ reservations, userName }) {
             {filtered.length === 0 ? (
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
                     <span className="text-4xl block mb-4">📅</span>
-                    <p className="text-lg font-medium text-gray-700">No reservations found</p>
+                    <p className="text-lg font-medium text-gray-700">{t('noReservationsFound')}</p>
                     <p className="text-sm text-gray-500 mt-1">
-                        {filter !== 'all' ? `You have no ${filter} reservations` : "You haven't made any reservations yet"}
+                        {filter !== 'all' ? `You have no ${filter} reservations` : t('noReservationsMade')}
                     </p>
                     <a
                         href="/customer/reserve"
                         className="inline-block mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                     >
-                        Make a Reservation
+                        {t('makeReservation')}
                     </a>
                 </div>
             ) : (
@@ -112,7 +114,7 @@ export default function MyReservations({ reservations, userName }) {
                                             onClick={() => handleCancel(res.id)}
                                             className="px-4 py-2 text-sm font-medium bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors border border-red-200"
                                         >
-                                            🚫 Cancel Reservation
+                                            {t('cancelReservation')}
                                         </button>
                                     )}
                                 </div>

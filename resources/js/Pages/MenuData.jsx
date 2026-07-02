@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function MenuData({ auth, menuItems = [] }) {
+    const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('all');
     
@@ -125,11 +127,11 @@ export default function MenuData({ auth, menuItems = [] }) {
                 {/* Header */}
                 <header className="bg-white shadow-sm border-b border-gray-200">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                        <h1 className="text-2xl font-bold text-gray-800">📋 Menu Data</h1>
+                        <h1 className="text-2xl font-bold text-gray-800">{t('menuData')}</h1>
                         <div className="flex items-center gap-4">
                             <span className="text-sm text-gray-600">{auth?.user?.name}</span>
                             <Link href="/logout" method="post" replace as="button" className="text-red-600 text-sm hover:underline">
-                                Logout
+                                {t('signOut')}
                             </Link>
                         </div>
                     </div>
@@ -144,7 +146,7 @@ export default function MenuData({ auth, menuItems = [] }) {
                                 onClick={() => setCategoryFilter('all')}
                                 className={`px-4 py-2 rounded-full text-sm font-medium ${categoryFilter === 'all' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border'}`}
                             >
-                                All
+                                {t('all')}
                             </button>
                             {categories.filter(c => c !== 'all').map(cat => (
                                 <button 
@@ -161,7 +163,7 @@ export default function MenuData({ auth, menuItems = [] }) {
                             href="/admin/manage-menu" 
                             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2"
                         >
-                            <span>+</span> Add New Item
+                            <span>+</span> {t('addMenuItem')}
                         </Link>
                     </div>
 
@@ -172,11 +174,11 @@ export default function MenuData({ auth, menuItems = [] }) {
                                 <thead className="bg-gray-50">
                                     <tr>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('name')}</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('category')}</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('price')}</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('status')}</th>
+                                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{t('actions')}</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
@@ -219,7 +221,7 @@ export default function MenuData({ auth, menuItems = [] }) {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                                                    {item.is_active ? 'Available' : 'Unavailable'}
+                                                    {item.is_active ? t('available') : t('unavailable')}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -227,13 +229,13 @@ export default function MenuData({ auth, menuItems = [] }) {
                                                     onClick={() => openEditModal(item)} 
                                                     className="text-blue-600 hover:text-blue-900 mr-4 font-bold"
                                                 >
-                                                    Edit
+                                                    {t('edit')}
                                                 </button>
                                                 <button 
                                                     onClick={() => handleDelete(item.id)} 
                                                     className="text-red-600 hover:text-red-900 font-bold"
                                                 >
-                                                    Delete
+                                                    {t('delete')}
                                                 </button>
                                             </td>
                                         </tr>
@@ -249,12 +251,12 @@ export default function MenuData({ auth, menuItems = [] }) {
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
                         <div className="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
                             <div className="flex justify-between items-center p-4 border-b">
-                                <h3 className="text-lg font-bold text-gray-800">Edit Menu Item</h3>
+                                <h3 className="text-lg font-bold text-gray-800">{t('editMenuItem')}</h3>
                                 <button onClick={closeEditModal} className="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
                             </div>
                             <form onSubmit={handleEditSubmit} className="p-4 space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('name')}</label>
                                     <input 
                                         type="text" 
                                         name="name" 
@@ -265,7 +267,7 @@ export default function MenuData({ auth, menuItems = [] }) {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('description')}</label>
                                     <textarea 
                                         name="desc"   // ✅ now correctly binds to editForm.desc
                                         value={editForm.desc} 
@@ -276,7 +278,7 @@ export default function MenuData({ auth, menuItems = [] }) {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">{t('price')}</label>
                                         <input 
                                             type="number" 
                                             name="price" 
@@ -288,7 +290,7 @@ export default function MenuData({ auth, menuItems = [] }) {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">{t('category')}</label>
                                         <input 
                                             type="text" 
                                             name="category" 
@@ -300,7 +302,7 @@ export default function MenuData({ auth, menuItems = [] }) {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('image')}</label>
                                     <input 
                                         type="file" 
                                         name="image" 
@@ -318,13 +320,13 @@ export default function MenuData({ auth, menuItems = [] }) {
                                         onClick={closeEditModal} 
                                         className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
                                     >
-                                        Cancel
+                                        {t('cancel')}
                                     </button>
                                     <button 
                                         type="submit" 
                                         className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                                     >
-                                        Save Changes
+                                        {t('saveChanges')}
                                     </button>
                                 </div>
                             </form>

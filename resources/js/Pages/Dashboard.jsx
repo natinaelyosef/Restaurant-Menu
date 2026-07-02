@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function Dashboard() {
+    const { t } = useTranslation();
     const { auth } = usePage().props;
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
 
     // Navigation links matching your web.php routes
     const navLinks = [
-        { name: 'Dashboard', href: '/dashboard', icon: '📊', active: true },
-        { name: 'Menu Data', href: '/dashboard/menu-data', icon: '📋', active: false },
-        { name: 'Manage Menu', href: '/dashboard/menu-items', icon: '', active: false },
-        { name: 'Reservations', href: '/admin/reservations', icon: '📅', active: false },
-        { name: 'Settings', href: '/admin/settings', icon: '⚙️', active: false },
+        { name: 'Dashboard', href: '/dashboard', icon: '📊', active: true, transKey: 'dashboard' },
+        { name: 'Menu Data', href: '/dashboard/menu-data', icon: '📋', active: false, transKey: 'menuData' },
+        { name: 'Manage Menu', href: '/dashboard/menu-items', icon: '', active: false, transKey: 'manageMenu' },
+        { name: 'Reservations', href: '/admin/reservations', icon: '📅', active: false, transKey: 'reservations' },
+        { name: 'Settings', href: '/admin/settings', icon: '⚙️', active: false, transKey: 'settings' },
     ];
 
     return (
         <>
-            <Head title="Dashboard" />
+            <Head title={t('dashboard')} />
 
             {/* ================= TOP NAVBAR (Full Width) ================= */}
             <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 z-50 flex items-center justify-between px-4 shadow-sm">
@@ -61,7 +63,7 @@ export default function Dashboard() {
                                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     onClick={() => setUserMenuOpen(false)}
                                 >
-                                    Profile
+                                    {t('editProfile')}
                                 </Link>
                                 <Link
                                     method="post"
@@ -71,7 +73,7 @@ export default function Dashboard() {
                                     className="block w-full text-left px-4 py-2 text-sm text-[#c8102e] hover:bg-gray-100"
                                     onClick={() => setUserMenuOpen(false)}
                                 >
-                                    Log Out
+                                    {t('signOut')}
                                 </Link>
                             </div>
                         </div>
@@ -89,7 +91,7 @@ export default function Dashboard() {
                 <nav className="mt-6 px-4 space-y-2">
                     {navLinks.map((link) => (
                         <Link
-                            key={link.name}
+                            key={link.transKey}
                             href={link.href}
                             className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors duration-200 ${
                                 link.active 
@@ -99,7 +101,7 @@ export default function Dashboard() {
                             onClick={() => setSidebarOpen(false)}
                         >
                             <span className="mr-3 text-lg">{link.icon}</span>
-                            {link.name}
+                            {t(link.transKey)}
                         </Link>
                     ))}
                 </nav>
@@ -136,7 +138,7 @@ export default function Dashboard() {
                     {/* Welcome Banner */}
                     <div className="mb-8 bg-gradient-to-r from-[#1a1a1a] to-[#2d2d2d] rounded-2xl p-6 text-white shadow-lg">
                         <h2 className="text-2xl font-bold font-['Playfair_Display'] mb-2">
-                            Welcome back, {auth?.user?.name || 'Admin'}! 👋
+                            {t('welcomeBack')}, {auth?.user?.name || 'Admin'}! 👋
                         </h2>
                         <p className="text-gray-300">
                             Here's what's happening at Dola Grill House today.
@@ -146,10 +148,10 @@ export default function Dashboard() {
                     {/* Stats Grid */}
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
                         {[
-                            { label: 'Total Orders', value: '142', icon: '📦', color: 'bg-blue-500' },
+                            { label: t('orders'), value: '142', icon: '📦', color: 'bg-blue-500' },
                             { label: "Today's Revenue", value: '$1,240', icon: '💰', color: 'bg-green-500' },
-                            { label: 'Active Reservations', value: '18', icon: '📅', color: 'bg-[#d4a017]' },
-                            { label: 'Menu Items', value: '24', icon: '🍔', color: 'bg-[#c8102e]' },
+                            { label: t('reservations'), value: '18', icon: '📅', color: 'bg-[#d4a017]' },
+                            { label: t('menuItems'), value: '24', icon: '🍔', color: 'bg-[#c8102e]' },
                         ].map((stat, index) => (
                             <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
                                 <div className="flex items-center justify-between">

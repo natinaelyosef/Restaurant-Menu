@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Head, Link, usePage, router } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
+import LanguageSwitcher from '@/Components/LanguageSwitcher';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function SuperAdminLayout({ title = 'Super Admin Dashboard', active = 'dashboard', children }) {
     const { auth, flash } = usePage().props;
     const user = auth?.user ?? { name: 'Super Admin', email: '' };
+    const { t } = useTranslation();
     useEffect(() => {
         try {
             if (!auth?.user) {
-                Inertia.visit('/login', { replace: true });
+                router.visit('/login', { replace: true });
             }
         } catch (e) {
             // ignore
@@ -19,13 +21,13 @@ export default function SuperAdminLayout({ title = 'Super Admin Dashboard', acti
 
     // All navigation links visible immediately upon login
     const navLinks = [
-        { key: 'manage-menu', name: 'Manage Menu', href: '/admin/manage-menu', icon: '🍽️' },
-        { key: 'menu-data', name: 'Menu Data', href: '/admin/menu-data', icon: '📋' },
-        { key: 'orders', name: 'Orders', href: '/admin/orders', icon: '🛒' },
-        { key: 'reservations', name: 'Reservations', href: '/admin/reservations', icon: '📅' },
-        { key: 'settings', name: 'Settings', href: '/admin/settings', icon: '⚙️' },
-        { key: 'dashboard', name: 'Dashboard', href: '/super/dashboard', icon: '📊' },
-        { key: 'change-password', name: 'Change Password', href: '/super/change-password', icon: '🔑' },
+        { key: 'manage-menu', name: t('manageMenu'), href: '/admin/manage-menu', icon: '🍽️' },
+        { key: 'menu-data', name: t('menuData'), href: '/admin/menu-data', icon: '📋' },
+        { key: 'orders', name: t('orders'), href: '/admin/orders', icon: '🛒' },
+        { key: 'reservations', name: t('reservations'), href: '/admin/reservations', icon: '📅' },
+        { key: 'settings', name: t('settings'), href: '/admin/settings', icon: '⚙️' },
+        { key: 'dashboard', name: t('dashboard'), href: '/super/dashboard', icon: '📊' },
+        { key: 'change-password', name: t('changePassword'), href: '/super/change-password', icon: '🔑' },
     ];
 
     const handleLogout = () => {
@@ -70,6 +72,9 @@ export default function SuperAdminLayout({ title = 'Super Admin Dashboard', acti
                     </div>
                 </div>
 
+                <div className="flex items-center md:me-4">
+                    <LanguageSwitcher />
+                </div>
                 <div className="relative">
                     <button
                         type="button"

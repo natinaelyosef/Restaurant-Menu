@@ -205,7 +205,12 @@ class SuperAdminController extends Controller
             'logo_url' => 'nullable|string|max:2048',
             'logo_text' => 'nullable|string|max:255',
             'logo_type' => 'required|string|in:upload,url,text',
-            'sections' => 'nullable', // accept JSON string or array
+            'sections' => 'nullable',
+            'background_type' => 'required|string|in:image,video,none',
+            'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'background_image_url' => 'nullable|string|max:2048',
+            'background_video' => 'nullable|string|max:2048',
+            'background_video_file' => 'nullable|mimes:mp4,webm,ogg,avi,mov|max:51200',
         ]);
 
         $settings = RestaurantSetting::first();
@@ -255,6 +260,36 @@ class SuperAdminController extends Controller
             $aboutPath = $request->file('about_image')->store('section_images', 'public');
             $sections['about'] = $sections['about'] ?? [];
             $sections['about']['image'] = $aboutPath;
+        }
+
+        // Handle background type and media
+        $settings->background_type = $validated['background_type'];
+
+        if ($validated['background_type'] === 'image') {
+            if ($request->hasFile('background_image')) {
+                // Delete old background image if stored locally
+                if ($settings->background_image && !str_starts_with($settings->background_image, 'http')) {
+                    Storage::disk('public')->delete($settings->background_image);
+                }
+                $settings->background_image = $request->file('background_image')->store('backgrounds', 'public');
+                $settings->background_video = null;
+            } elseif (!empty($validated['background_image_url'])) {
+                $settings->background_image = $validated['background_image_url'];
+                $settings->background_video = null;
+            }
+        } elseif ($validated['background_type'] === 'video') {
+            if ($request->hasFile('background_video_file')) {
+                if ($settings->background_video && !str_starts_with($settings->background_video, 'http')) {
+                    Storage::disk('public')->delete($settings->background_video);
+                }
+                $settings->background_video = $request->file('background_video_file')->store('backgrounds', 'public');
+            } elseif (!empty($validated['background_video'])) {
+                $settings->background_video = $validated['background_video'];
+            }
+            $settings->background_image = null;
+        } else {
+            $settings->background_image = null;
+            $settings->background_video = null;
         }
 
         $settings->sections = $sections;

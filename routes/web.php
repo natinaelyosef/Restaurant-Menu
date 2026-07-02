@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\FoodItemController;
 use App\Http\Controllers\SuperAdminController;
@@ -117,6 +118,9 @@ Route::middleware(['auth', \App\Http\Middleware\SuperAdminMiddleware::class])->p
 Route::post('/api/owner/food-items', [FoodItemController::class, 'store'])->middleware('auth');
 
 require __DIR__.'/auth.php';
+
+// Language switcher route
+Route::post('/locale', [LocaleController::class, 'update'])->name('locale.change');
 
 // Simple endpoint for SPA/frontend to verify session status
 Route::get('/auth/check', function (Request $request) {
