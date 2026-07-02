@@ -54,6 +54,16 @@ createInertiaApp({
         ),
     setup({ el, App, props }) {
         const root = createRoot(el);
+        const locale = props.page?.props?.locale || 'en';
+
+        if (typeof document !== 'undefined') {
+            document.documentElement.lang = locale;
+            if (locale === 'am') {
+                document.documentElement.classList.add('font-amharic');
+            } else {
+                document.documentElement.classList.remove('font-amharic');
+            }
+        }
 
         root.render(<App {...props} />);
     },

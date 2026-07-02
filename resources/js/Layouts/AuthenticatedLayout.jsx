@@ -1,12 +1,15 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
+import LanguageSwitcher from '@/Components/LanguageSwitcher';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link, usePage } from '@inertiajs/react';
+import useTranslation from '@/i18n/useTranslation';
+import { Link, router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
-import { Inertia } from '@inertiajs/inertia';
+import { route } from 'ziggy-js';
 
 export default function AuthenticatedLayout({ header, children }) {
+    const { t } = useTranslation();
     const user = usePage().props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -29,7 +32,7 @@ export default function AuthenticatedLayout({ header, children }) {
     useEffect(() => {
         try {
             if (!user) {
-                Inertia.visit('/login', { replace: true });
+                router.visit('/login', { replace: true });
             }
         } catch (e) {
             // ignore
@@ -53,12 +56,15 @@ export default function AuthenticatedLayout({ header, children }) {
                                     href={route('dashboard')}
                                     active={route().current('dashboard')}
                                 >
-                                    Dashboard
+                                    {t('dashboard')}
                                 </NavLink>
                             </div>
                         </div>
 
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div className="flex items-center sm:ms-6">
+                            <div className="relative me-3">
+                                <LanguageSwitcher />
+                            </div>
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>
@@ -89,7 +95,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                         <Dropdown.Link
                                             href={route('profile.edit')}
                                         >
-                                            Profile
+                                            {t('profile')}
                                         </Dropdown.Link>
                                         <Dropdown.Link
                                             href={route('logout')}
@@ -97,7 +103,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                             replace
                                             as="button"
                                         >
-                                            Log Out
+                                            {t('logout')}
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
@@ -174,7 +180,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
                         <div className="mt-3 space-y-1">
                             <ResponsiveNavLink href={route('profile.edit')}>
-                                Profile
+                                {t('profile')}
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
@@ -182,8 +188,11 @@ export default function AuthenticatedLayout({ header, children }) {
                                 replace
                                 as="button"
                             >
-                                Log Out
+                                {t('logout')}
                             </ResponsiveNavLink>
+                        </div>
+                        <div className="mt-3 border-t border-gray-200 pt-3 px-4">
+                            <LanguageSwitcher />
                         </div>
                     </div>
                 </div>

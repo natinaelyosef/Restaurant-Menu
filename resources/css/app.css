@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    font-feature-settings: 'rlig' 1, 'ccmp' 1;
+}
+
+.font-amharic {
+    font-family: 'Noto Sans Ethiopic', 'Segoe UI', sans-serif;
+}
+
+body.font-amharic {
+    line-height: 1.75;
+}
+
+button, input, textarea, select {
+    font-family: inherit;
+}

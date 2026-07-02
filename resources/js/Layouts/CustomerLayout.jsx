@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Head, Link, usePage, router } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
+import LanguageSwitcher from '@/Components/LanguageSwitcher';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function CustomerLayout({ title = 'Customer Dashboard', active = 'dashboard', children }) {
     const { auth, flash } = usePage().props;
     const user = auth?.user ?? { name: 'Customer', email: '' };
+    const { t } = useTranslation();
     useEffect(() => {
         try {
             if (!auth?.user) {
-                Inertia.visit('/login', { replace: true });
+                router.visit('/login', { replace: true });
             }
         } catch (e) {
             // ignore
@@ -18,9 +20,9 @@ export default function CustomerLayout({ title = 'Customer Dashboard', active = 
     const [userMenuOpen, setUserMenuOpen] = useState(false);
 
     const navLinks = [
-        { key: 'dashboard', name: 'Dashboard', href: '/customer/dashboard', icon: '🏠' },
-        { key: 'reserve', name: 'Make Reservation', href: '/customer/reserve', icon: '📅' },
-        { key: 'my-reservations', name: 'My Reservations', href: '/customer/my-reservations', icon: '📋' },
+        { key: 'dashboard', name: t('dashboard'), href: '/customer/dashboard', icon: '🏠' },
+        { key: 'reserve', name: t('makeReservation'), href: '/customer/reserve', icon: '📅' },
+        { key: 'my-reservations', name: t('myReservations'), href: '/customer/my-reservations', icon: '📋' },
     ];
 
     const handleLogout = () => {
@@ -63,6 +65,9 @@ export default function CustomerLayout({ title = 'Customer Dashboard', active = 
                     </div>
                 </div>
 
+                <div className="flex items-center md:me-4">
+                    <LanguageSwitcher />
+                </div>
                 <div className="relative">
                     <button
                         type="button"

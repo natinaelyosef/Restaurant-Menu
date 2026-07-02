@@ -14,6 +14,7 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                amharic: ['Noto Sans Ethiopic', 'sans-serif'],
             },
         },
     },

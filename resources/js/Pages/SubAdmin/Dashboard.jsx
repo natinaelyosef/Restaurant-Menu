@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function Dashboard({ userName, userEmail, userStatus }) {
+    const { t } = useTranslation();
     const stats = [
         { label: 'My Status', value: userStatus?.toUpperCase() || 'ACTIVE', color: userStatus === 'active' ? 'text-green-600' : 'text-red-600', icon: userStatus === 'active' ? '✅' : '⏸️' },
     ];
@@ -12,10 +14,10 @@ export default function Dashboard({ userName, userEmail, userStatus }) {
             {/* Welcome Banner */}
             <div className="mb-8 bg-gradient-to-r from-teal-700 to-emerald-600 rounded-2xl p-6 text-white shadow-lg">
                 <h2 className="text-2xl font-bold mb-2">
-                    Welcome back, {userName}!
+                    {t('welcomeBack')}, {userName}!
                 </h2>
                 <p className="text-teal-100">
-                    You are logged in as a Sub-Administrator.
+                    You are logged in as {t('subAdministrator')}.
                 </p>
             </div>
 
@@ -27,7 +29,7 @@ export default function Dashboard({ userName, userEmail, userStatus }) {
                             {stats[0].icon}
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500">Account Status</p>
+                            <p className="text-sm font-medium text-gray-500">{t('accountStatus')}</p>
                             <p className={`text-xl font-bold ${stats[0].color}`}>{stats[0].value}</p>
                         </div>
                     </div>
@@ -39,8 +41,8 @@ export default function Dashboard({ userName, userEmail, userStatus }) {
                             👤
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500">Your Role</p>
-                            <p className="text-xl font-bold text-gray-900">Sub-Admin</p>
+                            <p className="text-sm font-medium text-gray-500">{t('yourRole')}</p>
+                            <p className="text-xl font-bold text-gray-900">{t('subAdministrator')}</p>
                         </div>
                     </div>
                 </div>
@@ -51,7 +53,7 @@ export default function Dashboard({ userName, userEmail, userStatus }) {
                             📧
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500">Email</p>
+                            <p className="text-sm font-medium text-gray-500">{t('emailAddress')}</p>
                             <p className="text-sm font-bold text-gray-900 truncate max-w-[150px]">{userEmail}</p>
                         </div>
                     </div>
@@ -60,7 +62,7 @@ export default function Dashboard({ userName, userEmail, userStatus }) {
 
             {/* Quick Actions */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('quickActions')}</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Link
                         href="/sub/change-password"
@@ -68,8 +70,8 @@ export default function Dashboard({ userName, userEmail, userStatus }) {
                     >
                         <span className="text-2xl mr-3">🔑</span>
                         <div>
-                            <p className="font-medium text-teal-900">Change Password</p>
-                            <p className="text-sm text-teal-600">Update your login password</p>
+                            <p className="font-medium text-teal-900">{t('changePassword')}</p>
+                            <p className="text-sm text-teal-600">{t('updateLoginPassword')}</p>
                         </div>
                     </Link>
                     <Link
@@ -78,8 +80,8 @@ export default function Dashboard({ userName, userEmail, userStatus }) {
                     >
                         <span className="text-2xl mr-3">⚙️</span>
                         <div>
-                            <p className="font-medium text-gray-900">Profile Settings</p>
-                            <p className="text-sm text-gray-600">Update your profile info</p>
+                            <p className="font-medium text-gray-900">{t('profileSettings')}</p>
+                            <p className="text-sm text-gray-600">{t('updateYourProfile')}</p>
                         </div>
                     </Link>
                 </div>

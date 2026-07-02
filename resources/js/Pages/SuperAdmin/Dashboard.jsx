@@ -1,16 +1,18 @@
 import React from 'react';
+import useTranslation from '@/i18n/useTranslation';
 import { usePage, Link } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 
 export default function Dashboard({ totalSubAdmins, active, suspended, banned, recentSubAdmins }) {
+    const { t } = useTranslation();
     const { auth } = usePage().props;
     const user = auth?.user ?? { name: 'Super Admin' };
 
     const stats = [
-        { label: 'Total Sub-Admins', value: totalSubAdmins || 0, color: 'bg-blue-500', icon: '👥' },
-        { label: 'Active', value: active || 0, color: 'bg-green-500', icon: '✅' },
-        { label: 'Suspended', value: suspended || 0, color: 'bg-yellow-500', icon: '⏸️' },
-        { label: 'Banned', value: banned || 0, color: 'bg-red-500', icon: '🚫' },
+        { label: t('totalSubAdmins'), value: totalSubAdmins || 0, color: 'bg-blue-500', icon: '👥' },
+        { label: t('active'), value: active || 0, color: 'bg-green-500', icon: '✅' },
+        { label: t('suspended'), value: suspended || 0, color: 'bg-yellow-500', icon: '⏸️' },
+        { label: t('banned'), value: banned || 0, color: 'bg-red-500', icon: '🚫' },
     ];
 
     const getStatusBadge = (status) => {
@@ -27,10 +29,10 @@ export default function Dashboard({ totalSubAdmins, active, suspended, banned, r
             {/* Welcome Banner */}
             <div className="mb-8 bg-gradient-to-r from-purple-900 to-indigo-800 rounded-2xl p-6 text-white shadow-lg">
                 <h2 className="text-2xl font-bold mb-2">
-                    Welcome back, {user.name}!
+                    {t('welcomeBack')}, {user.name}!
                 </h2>
                 <p className="text-purple-200">
-                    Here's an overview of your sub-admin management system.
+                    {t('subAdminOverviewDesc')}
                 </p>
             </div>
 
@@ -53,7 +55,7 @@ export default function Dashboard({ totalSubAdmins, active, suspended, banned, r
 
             {/* Quick Actions */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('quickActions')}</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <Link
                         href="/super/sub-admins"
@@ -61,8 +63,8 @@ export default function Dashboard({ totalSubAdmins, active, suspended, banned, r
                     >
                         <span className="text-2xl mr-3">➕</span>
                         <div>
-                            <p className="font-medium text-purple-900">Add Sub-Admin</p>
-                            <p className="text-sm text-purple-600">Create new sub-admin account</p>
+                            <p className="font-medium text-purple-900">{t('addSubAdmin')}</p>
+                            <p className="text-sm text-purple-600">{t('createSubAdminAccount')}</p>
                         </div>
                     </Link>
                     <Link
@@ -71,8 +73,8 @@ export default function Dashboard({ totalSubAdmins, active, suspended, banned, r
                     >
                         <span className="text-2xl mr-3">👥</span>
                         <div>
-                            <p className="font-medium text-blue-900">Manage Sub-Admins</p>
-                            <p className="text-sm text-blue-600">View and manage all accounts</p>
+                            <p className="font-medium text-blue-900">{t('manageSubAdmins')}</p>
+                            <p className="text-sm text-blue-600">{t('viewManageAllAccounts')}</p>
                         </div>
                     </Link>
                     <Link
@@ -81,8 +83,8 @@ export default function Dashboard({ totalSubAdmins, active, suspended, banned, r
                     >
                         <span className="text-2xl mr-3">⚙️</span>
                         <div>
-                            <p className="font-medium text-gray-900">Profile Settings</p>
-                            <p className="text-sm text-gray-600">Update your profile</p>
+                            <p className="font-medium text-gray-900">{t('profileSettings')}</p>
+                            <p className="text-sm text-gray-600">{t('updateYourProfile')}</p>
                         </div>
                     </Link>
                 </div>
@@ -91,9 +93,9 @@ export default function Dashboard({ totalSubAdmins, active, suspended, banned, r
             {/* Recent Sub-Admins */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-800">Recent Sub-Admins</h3>
+                    <h3 className="text-lg font-semibold text-gray-800">{t('recentSubAdmins')}</h3>
                     <Link href="/super/sub-admins" className="text-purple-600 hover:text-purple-800 text-sm font-medium">
-                        View All →
+                        {t('viewAll')} →
                     </Link>
                 </div>
                 {recentSubAdmins && recentSubAdmins.length > 0 ? (
@@ -101,10 +103,10 @@ export default function Dashboard({ totalSubAdmins, active, suspended, banned, r
                         <table className="w-full">
                             <thead>
                                 <tr className="border-b border-gray-200">
-                                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Name</th>
-                                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Email</th>
-                                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Status</th>
-                                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Created</th>
+                                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">{t('name')}</th>
+                                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">{t('emailAddress')}</th>
+                                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">{t('status')}</th>
+                                    <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">{t('created')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -127,8 +129,8 @@ export default function Dashboard({ totalSubAdmins, active, suspended, banned, r
                     </div>
                 ) : (
                     <div className="text-center py-8 text-gray-500">
-                        <p className="text-lg mb-2">No sub-admins yet</p>
-                        <p className="text-sm">Create your first sub-admin to get started.</p>
+                        <p className="text-lg mb-2">{t('noSubAdminsYet')}</p>
+                        <p className="text-sm">{t('createFirstSubAdmin')}</p>
                     </div>
                 )}
             </div>

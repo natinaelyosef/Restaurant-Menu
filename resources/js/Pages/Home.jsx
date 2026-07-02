@@ -1,118 +1,177 @@
 import React, { useState, useEffect } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
+import useTranslation from '../i18n/useTranslation';
+import LanguageSwitcher from '../Components/LanguageSwitcher';
+import { getMenuCategoryOptions, normalizeMenuCategory } from '../utils/menuCategories';
 
-const defaultMenuItems = [
+const defaultMenuItemsData = [
     {
-        name: "The Dola Classic",
-        desc: "Double Angus beef patty, melted cheddar cheese, pickles, red onion, tomato, lettuce on toasted brioche bun.",
+        id: 'dola_classic',
+        nameKey: 'menuItemDolaClassicName',
+        descKey: 'menuItemDolaClassicDesc',
         price: 14.99,
-        category: "burgers",
-        badge: "popular",
-        badgeText: "⭐ Best Seller",
-        tags: ["Angus Beef", "Cheddar", "Brioche"],
+        category: 'burgers',
+        badge: 'popular',
+        badgeTextKey: 'badgeBestSeller',
+        tagsKeys: ['tagAngusBeef', 'tagCheddar', 'tagBrioche'],
         rating: 4.9,
-        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&h=350&fit=crop"
+        image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&h=350&fit=crop'
     },
     {
-        name: "Smoky BBQ Burger",
-        desc: "Smoked beef patty with house BBQ sauce, crispy onion rings, pepper jack cheese, and jalapeños.",
+        id: 'smoky_bbq',
+        nameKey: 'menuItemSmokyBBQName',
+        descKey: 'menuItemSmokyBBQDesc',
         price: 16.99,
-        category: "burgers",
-        badge: "spicy",
-        badgeText: "🌶️ Spicy",
-        tags: ["Smoked", "BBQ", "Jalapeño"],
+        category: 'burgers',
+        badge: 'spicy',
+        badgeTextKey: 'badgeSpicy',
+        tagsKeys: ['tagSmoked', 'tagBBQ', 'tagJalapeno'],
         rating: 4.8,
-        image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=500&h=350&fit=crop"
+        image: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=500&h=350&fit=crop'
     },
     {
-        name: "Truffle Mushroom Burger",
-        desc: "Wagyu beef patty topped with sautéed mushrooms, truffle aioli, Swiss cheese on a pretzel bun.",
+        id: 'truffle_mushroom',
+        nameKey: 'menuItemTruffleMushroomName',
+        descKey: 'menuItemTruffleMushroomDesc',
         price: 19.99,
-        category: "burgers",
-        badge: "new",
-        badgeText: "✨ New",
-        tags: ["Wagyu", "Truffle", "Mushroom"],
+        category: 'burgers',
+        badge: 'new',
+        badgeTextKey: 'badgeNew',
+        tagsKeys: ['tagWagyu', 'tagTruffle', 'tagMushroom'],
         rating: 4.9,
-        image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&h=350&fit=crop"
+        image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&h=350&fit=crop'
     },
     {
-        name: "Crispy Chicken Burger",
-        desc: "Buttermilk fried chicken breast, coleslaw, pickles, spicy mayo on a potato bun.",
+        id: 'crispy_chicken',
+        nameKey: 'menuItemCrispyChickenName',
+        descKey: 'menuItemCrispyChickenDesc',
         price: 13.99,
-        category: "burgers",
-        badge: "",
-        badgeText: "",
-        tags: ["Chicken", "Crispy", "Coleslaw"],
+        category: 'burgers',
+        badge: '',
+        badgeTextKey: '',
+        tagsKeys: ['tagChicken', 'tagCrispy', 'tagColeslaw'],
         rating: 4.7,
-        image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=500&h=350&fit=crop"
+        image: 'https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=500&h=350&fit=crop'
     },
     {
-        name: "Loaded Cheese Fries",
-        desc: "Crispy golden fries loaded with melted cheese, bacon bits, jalapeños, and ranch drizzle.",
+        id: 'loaded_cheese_fries',
+        nameKey: 'menuItemLoadedCheeseFriesName',
+        descKey: 'menuItemLoadedCheeseFriesDesc',
         price: 8.99,
-        category: "sides",
-        badge: "popular",
-        badgeText: "⭐ Popular",
-        tags: ["Cheese", "Bacon", "Fries"],
+        category: 'sides',
+        badge: 'popular',
+        badgeTextKey: 'badgePopular',
+        tagsKeys: ['tagCheese', 'tagBacon', 'tagFries'],
         rating: 4.8,
-        image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500&h=350&fit=crop"
+        image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500&h=350&fit=crop'
     },
     {
-        name: "Onion Rings Tower",
-        desc: "Beer-battered onion rings stacked high, served with smoky chipotle dipping sauce.",
+        id: 'onion_rings',
+        nameKey: 'menuItemOnionRingsName',
+        descKey: 'menuItemOnionRingsDesc',
         price: 7.99,
-        category: "sides",
-        badge: "",
-        badgeText: "",
-        tags: ["Crispy", "Beer Battered"],
+        category: 'sides',
+        badge: '',
+        badgeTextKey: '',
+        tagsKeys: ['tagCrispy', 'tagBeerBattered'],
         rating: 4.6,
-        image: "https://images.unsplash.com/photo-1639024471283-03518883512d?w=500&h=350&fit=crop"
+        image: 'https://images.unsplash.com/photo-1639024471283-03518883512d?w=500&h=350&fit=crop'
     },
     {
-        name: "Craft Milkshake",
-        desc: "Thick and creamy hand-spun milkshake. Choose from vanilla, chocolate, strawberry, or Oreo.",
+        id: 'craft_milkshake',
+        nameKey: 'menuItemCraftMilkshakeName',
+        descKey: 'menuItemCraftMilkshakeDesc',
         price: 6.99,
-        category: "drinks",
-        badge: "popular",
-        badgeText: "⭐ Favorite",
-        tags: ["Creamy", "Hand-spun"],
+        category: 'drinks',
+        badge: 'popular',
+        badgeTextKey: 'badgeFavorite',
+        tagsKeys: ['tagCreamy', 'tagHandSpun'],
         rating: 4.9,
-        image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=500&h=350&fit=crop"
+        image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=500&h=350&fit=crop'
     },
     {
-        name: "Fresh Lemonade",
-        desc: "House-made lemonade with fresh mint, a hint of ginger, and a touch of honey.",
+        id: 'fresh_lemonade',
+        nameKey: 'menuItemFreshLemonadeName',
+        descKey: 'menuItemFreshLemonadeDesc',
         price: 4.99,
-        category: "drinks",
-        badge: "new",
-        badgeText: "✨ New",
-        tags: ["Fresh", "Natural"],
+        category: 'drinks',
+        badge: 'new',
+        badgeTextKey: 'badgeNew',
+        tagsKeys: ['tagFresh', 'tagNatural'],
         rating: 4.7,
-        image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=500&h=350&fit=crop"
+        image: 'https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=500&h=350&fit=crop'
     },
     {
-        name: "Chocolate Lava Cake",
-        desc: "Warm chocolate cake with a molten center, served with vanilla ice cream and berry compote.",
+        id: 'chocolate_lava_cake',
+        nameKey: 'menuItemChocolateLavaCakeName',
+        descKey: 'menuItemChocolateLavaCakeDesc',
         price: 9.99,
-        category: "desserts",
-        badge: "popular",
-        badgeText: "⭐ Must Try",
-        tags: ["Chocolate", "Warm", "Ice Cream"],
+        category: 'desserts',
+        badge: 'popular',
+        badgeTextKey: 'badgeMustTry',
+        tagsKeys: ['tagChocolate', 'tagWarm', 'tagIceCream'],
         rating: 4.9,
-        image: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=500&h=350&fit=crop"
+        image: 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=500&h=350&fit=crop'
     }
 ];
 
+const defaultSpecialsItems = [
+    { icon: '🍔', titleKey: 'specialsItemDolaClassicTitle', descKey: 'specialsItemDolaClassicDesc', price: '$14.99', oldPrice: '$19.99' },
+    { icon: '🥩', titleKey: 'specialsItemSmokyBBQTitle', descKey: 'specialsItemSmokyBBQDesc', price: '$16.99', oldPrice: '$22.99' },
+    { icon: '🌿', titleKey: 'specialsItemGardenVeggieTitle', descKey: 'specialsItemGardenVeggieDesc', price: '$12.99', oldPrice: '$17.99' }
+];
+
+const defaultTestimonialsData = [
+    { stars: '⭐⭐⭐⭐⭐', textKey: 'testimonialJamesText', name: 'James Davidson', roleKey: 'testimonialJamesRole', avatar: 'JD' },
+    { stars: '⭐⭐⭐⭐⭐', textKey: 'testimonialSarahText', name: 'Sarah Mitchell', roleKey: 'testimonialSarahRole', avatar: 'SM' },
+    { stars: '⭐⭐⭐⭐⭐', textKey: 'testimonialRobertText', name: 'Robert Kim', roleKey: 'testimonialRobertRole', avatar: 'RK' },
+];
+
+const getMediaUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    if (path.startsWith('/')) return path;
+    if (path.startsWith('storage/')) return `/${path}`;
+    return `/storage/${path}`;
+};
+
+const getVideoType = (src) => {
+    if (!src) return 'video/mp4';
+    const ext = src.split('.').pop().toLowerCase().split('?')[0];
+    const types = { mp4: 'video/mp4', webm: 'video/webm', ogg: 'video/ogg', avi: 'video/x-msvideo', mov: 'video/quicktime' };
+    return types[ext] || 'video/mp4';
+};
+
 export default function Home({ menuItems: initialMenuItems = [], restaurantSettings = null }) {
     const { props } = usePage();
+    const { t } = useTranslation();
+
+    const defaultMenuItems = defaultMenuItemsData.map((item) => ({
+        ...item,
+        name: item.name ?? t(item.nameKey),
+        desc: item.desc ?? t(item.descKey),
+        badgeText: item.badgeText ?? (item.badgeTextKey ? t(item.badgeTextKey) : ''),
+        tags: item.tags ?? (item.tagsKeys ? item.tagsKeys.map((key) => t(key)) : []),
+    }));
+
+    const defaultSpecialsItemsTranslated = defaultSpecialsItems.map((item) => ({
+        ...item,
+        title: t(item.titleKey),
+        desc: t(item.descKey),
+    }));
+
+    const defaultTestimonialsItems = defaultTestimonialsData.map((item) => ({
+        ...item,
+        text: t(item.textKey),
+        role: t(item.roleKey),
+    }));
 
     useEffect(() => {
         try {
             const user = props?.auth?.user;
             if (user) {
                 const dashboard = user.dashboard || '/dashboard';
-                Inertia.visit(dashboard, { replace: true });
+                router.visit(dashboard, { replace: true });
             }
         } catch (e) {
             // ignore
@@ -135,45 +194,44 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
     const logoSrc = isImageLogo ? (brandLogo.startsWith('http') || brandLogo.startsWith('/') ? brandLogo : `/storage/${brandLogo}`) : null;
     const sections = restaurantSettings?.sections || {};
 
-    const specialsHeading = sections?.specials?.heading || sections?.specialsHeading || "Today's Specials";
-    const specialsTitle = sections?.specials?.title || sections?.specialsTitle || "Chef's Recommendations";
-    const specialsDescription = sections?.specials?.description || sections?.specialsDescription || 'Limited-time offers crafted by our head chef using seasonal ingredients.';
-    const specialsItems = sections?.specials?.items || (Array.isArray(sections?.specials) ? sections.specials : [
-        { icon: '🍔', title: 'The Dola Classic', desc: 'Double Angus patty, melted cheddar, caramelized onions, pickles, secret sauce on brioche bun.', price: '$14.99', oldPrice: '$19.99' },
-        { icon: '🥩', title: 'Smoky BBQ Burger', desc: 'Smoked beef patty, BBQ sauce, crispy onion rings, pepper jack cheese, jalapeños.', price: '$16.99', oldPrice: '$22.99' },
-        { icon: '🌿', title: 'Garden Veggie Burger', desc: 'Plant-based patty, avocado, sprouts, tomato, red onion, herb aioli on whole grain bun.', price: '$12.99', oldPrice: '$17.99' }
-    ]);
+    const backgroundType = restaurantSettings?.background_type || 'image';
+    const backgroundImage = restaurantSettings?.background_image || '';
+    const backgroundVideo = restaurantSettings?.background_video || '';
+    const backgroundImageUrl = getMediaUrl(backgroundImage);
+    const backgroundVideoUrl = getMediaUrl(backgroundVideo);
+    const videoMimeType = getVideoType(backgroundVideoUrl);
+
+    const specialsHeading = sections?.specials?.heading || sections?.specialsHeading || t('specialsHeading');
+    const specialsTitle = sections?.specials?.title || sections?.specialsTitle || t('specialsTitle');
+    const specialsDescription = sections?.specials?.description || sections?.specialsDescription || t('specialsDescription');
+    const specialsItems = sections?.specials?.items || (Array.isArray(sections?.specials) ? sections.specials : defaultSpecialsItemsTranslated);
 
     const aboutData = {
         image: sections?.about?.image || sections?.aboutImage || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&h=700&fit=crop',
         years: sections?.about?.years || sections?.aboutYears || '15+',
-        storyTitle: sections?.about?.title || sections?.aboutTitle || 'Crafted With Love Since 2009',
-        storyText: sections?.about?.text || sections?.aboutText || "At Dola Grill House, we believe that a great burger is more than just food — it's an experience. We source the finest Angus beef, bake our brioche buns fresh daily, and craft every sauce from scratch.",
+        storyTitle: sections?.about?.title || sections?.aboutTitle || t('storyTitle'),
+        storyText: sections?.about?.text || sections?.aboutText || t('storyText'),
         features: sections?.about?.features || sections?.aboutFeatures || [
-            { icon: '🥩', label: 'Premium Angus Beef' },
-            { icon: '🍞', label: 'Fresh Baked Buns' },
-            { icon: '🌿', label: 'Farm Fresh Veggies' },
-            { icon: '👨‍🍳', label: 'Expert Chefs' },
+            { icon: '🥩', label: t('featurePremiumAngusBeef') },
+            { icon: '🍞', label: t('featureFreshBakedBuns') },
+            { icon: '🌿', label: t('featureFarmFreshVeggies') },
+            { icon: '👨‍🍳', label: t('featureExpertChefs') },
         ]
     };
 
-    const testimonialsHeading = sections?.testimonials?.heading || sections?.testimonialsHeading || 'Testimonials';
-    const testimonialsTitle = sections?.testimonials?.title || sections?.testimonialsTitle || 'What Our Guests Say';
-    const testimonialsItems = sections?.testimonials?.items || (Array.isArray(sections?.testimonials) ? sections.testimonials : [
-        { stars: '⭐⭐⭐⭐⭐', text: "The best burger I've ever had! The cheese was perfectly melted and the patty was so juicy.", name: 'James Davidson', role: 'Food Blogger', avatar: 'JD' },
-        { stars: '⭐⭐⭐⭐⭐', text: "Amazing atmosphere and even better food. The Dola Classic is out of this world.", name: 'Sarah Mitchell', role: 'Regular Customer', avatar: 'SM' },
-        { stars: '⭐⭐⭐⭐⭐', text: "I've tried burgers all over the city and nothing comes close to Dola Grill House.", name: 'Robert Kim', role: 'Food Critic', avatar: 'RK' },
-    ]);
+    const testimonialsHeading = sections?.testimonials?.heading || sections?.testimonialsHeading || t('testimonialsHeading');
+    const testimonialsTitle = sections?.testimonials?.title || sections?.testimonialsTitle || t('testimonialsTitle');
+    const testimonialsItems = sections?.testimonials?.items || (Array.isArray(sections?.testimonials) ? sections.testimonials : defaultTestimonialsItems);
 
     const reservationData = sections.reservation || {
-        titleSmall: 'Reservation',
-        titleLarge: 'Book Your Table Today',
-        text: 'Reserve your spot at Dola Grill House and enjoy an unforgettable dining experience with family and friends.',
+        titleSmall: t('reservationTitleSmall'),
+        titleLarge: t('reservationTitleLarge'),
+        text: t('reservationText'),
         info: [
-            { icon: '📍', label: 'Location', value: '123 Grill Street, Food City, FC 10001' },
-            { icon: '🕐', label: 'Hours', value: 'Mon–Sun: 11:00 AM – 11:00 PM' },
-            { icon: '📞', label: 'Phone', value: '+1 (555) 123-4567' },
-            { icon: '✉️', label: 'Email', value: 'hello@dolagrillhouse.com' },
+            { icon: '📍', label: t('locationLabel'), value: '123 Grill Street, Food City, FC 10001' },
+            { icon: '🕐', label: t('hoursLabel'), value: t('hoursRangeWeek') },
+            { icon: '📞', label: t('phoneLabel'), value: '+1 (555) 123-4567' },
+            { icon: '✉️', label: t('emailLabel'), value: 'hello@dolagrillhouse.com' },
         ]
     };
 
@@ -194,18 +252,14 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
         price: Number(item.price ?? 0),
         rating: Number(item.rating ?? 5),
         tags: normalizeTags(item.tags),
+        category: normalizeMenuCategory(item.category),
     }));
 
-    const displayedMenuItems = databaseMenuItems.length > 0 ? databaseMenuItems : defaultMenuItems;
+    const displayedMenuItems = databaseMenuItems.length > 0 ? databaseMenuItems : defaultMenuItems.map((item) => ({
+        ...item,
+        category: normalizeMenuCategory(item.category),
+    }));
     const filteredMenu = activeCategory === 'all' ? displayedMenuItems : displayedMenuItems.filter(i => i.category === activeCategory);
-
-    const getImageUrl = (image) => {
-        if (!image) return '';
-        if (image.startsWith('http')) return image;
-        if (image.startsWith('/')) return image;
-        if (image.startsWith('storage/')) return `/${image}`;
-        return `/storage/${image}`;
-    };
 
     // Inject Enhanced CSS
     useEffect(() => {
@@ -323,7 +377,7 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
                     text-transform: uppercase; display: block; margin-top: -4px; transition: color 0.3s;
                 }
 
-                .nav-links { display: flex; list-style: none; gap: 32px; align-items: center; }
+                .nav-links { display: flex; list-style: none; gap: 28px; align-items: center; }
                 .nav-links a {
                     text-decoration: none; color: var(--text-light); font-size: 14px;
                     font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
@@ -335,6 +389,18 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
                 }
                 .nav-links a:hover { color: var(--primary); }
                 .nav-links a:hover::after { width: 100%; }
+
+                /* External link styling */
+                .nav-links a.external {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                }
+                .nav-links a.external::after {
+                    content: '↗';
+                    font-size: 10px;
+                    opacity: 0.7;
+                }
 
                 .btn-reserve {
                     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -389,6 +455,7 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
                 /* ===== HERO ===== */
                 .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; background: #000; }
                 .hero-bg-video { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; object-fit: cover; z-index: 0; pointer-events: none; }
+                .hero-bg-image { position: absolute; inset: 0; background-size: cover; background-position: center; z-index: 0; }
                 .hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.6) 50%, rgba(10,10,10,0.9) 100%); z-index: 1; }
                 .hero-particles { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
                 .particle { position: absolute; width: 4px; height: 4px; background: var(--gold); border-radius: 50%; opacity: 0; animation: float-particle 8s ease-in-out infinite; filter: blur(1px); }
@@ -829,12 +896,12 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
 
     const addToCart = (name) => {
         setCartItems(prev => prev + 1);
-        showNotification(`🍔 "${name}" added to cart!`);
+        showNotification(t('itemAddedToCartNotification'));
     };
 
     const handleRate = (itemId, stars) => {
         if (!itemId) {
-            showNotification('⚠️ Cannot rate local demo items');
+            showNotification(t('ratingDisabledNotification'));
             return;
         }
         router.post(`/menu-items/${itemId}/rate`, { rating: stars }, {
@@ -847,7 +914,7 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
 
     const handleReservationSubmit = (e) => {
         e.preventDefault();
-        showNotification('✅ Reservation confirmed! See you soon!');
+        showNotification(t('reservationConfirmed'));
         e.target.reset();
     };
 
@@ -857,7 +924,7 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
                 <div className={`preloader ${!showPreloader ? 'hidden' : ''}`} id="preloader">
                     <div style={{ textAlign: 'center' }}>
                         <div className="preloader-burger">🍔</div>
-                        <div className="preloader-text">Firing up the grill...</div>
+                        <div className="preloader-text">{t('preloaderText')}</div>
                     </div>
                 </div>
             )}
@@ -875,37 +942,52 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
                     )}
                     <div>
                         <span className="logo-text">{brandName}</span>
-                        <span className="logo-sub">House</span>
+                        <span className="logo-sub">{t('house')}</span>
                     </div>
                 </Link>
                 <ul className={`nav-links ${isMenuOpen ? 'active' : ''}`} id="navLinks">
-                    <li><a href="#home" onClick={() => setIsMenuOpen(false)}>Home</a></li>
-                    <li><a href="#menu" onClick={() => setIsMenuOpen(false)}>Menu</a></li>
-                    <li><a href="#specials" onClick={() => setIsMenuOpen(false)}>Specials</a></li>
-                    <li><a href="#about" onClick={() => setIsMenuOpen(false)}>About</a></li>
-                    <li><a href="#reviews" onClick={() => setIsMenuOpen(false)}>Reviews</a></li>
+                    <li><a href="#home" onClick={() => setIsMenuOpen(false)}>{t('home')}</a></li>
+                    <li><a href="#menu" onClick={() => setIsMenuOpen(false)}>{t('menu')}</a></li>
+                    <li><a href="#specials" onClick={() => setIsMenuOpen(false)}>{t('specials')}</a></li>
+                    <li><a href="#about" onClick={() => setIsMenuOpen(false)}>{t('about')}</a></li>
+                    <li><a href="#reviews" onClick={() => setIsMenuOpen(false)}>{t('reviews')}</a></li>
+                    {/* 👇 Contact Developer - External Link */}
                     <li>
-                        <a href="/register" onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); router.get('/register'); }}>Register</a>
+                        <a 
+                            href="https://natinaelyosef.github.io/natinael-yosef-portfolio/" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="external"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            {t('contactDeveloper')}
+                        </a>
                     </li>
                     <li>
-                        <a href="/login" onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); router.get('/login'); }}>Login</a>
+                        <a href="/register" onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); router.get('/register'); }}>{t('register')}</a>
                     </li>
-                    <li><a href="#reserve" className="btn-reserve" onClick={() => setIsMenuOpen(false)}>Reserve</a></li>
+                    <li>
+                        <a href="/login" onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); router.get('/login'); }}>{t('login')}</a>
+                    </li>
+                    <li><a href="#reserve" className="btn-reserve" onClick={() => setIsMenuOpen(false)}>{t('reserve')}</a></li>
                 </ul>
-                <button 
-                    className="theme-toggle" 
-                    id="themeToggle" 
-                    type="button" 
-                    aria-label={isLightMode ? "Switch to dark mode" : "Switch to light mode"}
-                    onClick={() => setIsLightMode(!isLightMode)}
-                >
-                    {isLightMode ? '☾' : '☀'}
-                </button>
+                <div className="flex items-center gap-2">
+                    <LanguageSwitcher />
+                    <button 
+                        className="theme-toggle" 
+                        id="themeToggle" 
+                        type="button" 
+                        aria-label={t('toggleTheme')}
+                        onClick={() => setIsLightMode(!isLightMode)}
+                    >
+                        {isLightMode ? '☾' : '☀'}
+                    </button>
+                </div>
                 <button 
                     className={`hamburger ${isMenuOpen ? 'active' : ''}`} 
                     id="hamburger" 
                     type="button" 
-                    aria-label="Toggle navigation menu"
+                    aria-label={t('toggleNavigationMenu')}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                     <span></span><span></span><span></span>
@@ -913,68 +995,75 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
             </nav>
 
             <section className="hero" id="home">
-                <video className="hero-bg-video" autoPlay muted loop playsInline poster="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1920&h=1080&fit=crop" aria-hidden="true">
-                    <source src="burger.mp4" type="video/mp4" />
-                </video>
+                {backgroundType === 'video' && backgroundVideoUrl ? (
+                    <video className="hero-bg-video" autoPlay muted loop playsInline aria-hidden="true">
+                        <source src={backgroundVideoUrl} type={videoMimeType} />
+                    </video>
+                ) : backgroundType === 'image' && backgroundImageUrl ? (
+                    <div className="hero-bg-image" style={{ backgroundImage: `url('${backgroundImageUrl}')` }}></div>
+                ) : null}
                 <div className="hero-overlay"></div>
                 <div className="hero-particles" id="particles"></div>
                 <div className="hero-content">
                     <div className="hero-text">
-                        <div className="hero-badge">🔥 #1 Burger in Town</div>
+                        <div className="hero-badge">{t('heroBadge')}</div>
                         <h1 className="hero-title">
-                            Taste The<br />
-                            <span>Perfect</span> <span className="script">Burger</span>
+                            {t('heroTitleLine1')}<br />
+                            <span>{t('heroTitleHighlight')}</span> <span className="script">{t('heroTitleSuffix')}</span>
                         </h1>
                         <p className="hero-desc">
-                            Hand-crafted with premium Angus beef, melted cheddar cheese,
-                            fresh vegetables, and our secret sauce — all on a toasted brioche bun.
-                            Every bite is a masterpiece.
+                            {t('heroDesc')}
                         </p>
                         <div className="hero-buttons">
-                            <a href="#menu" className="btn-primary">🍔 View Menu</a>
-                            <a href="#reserve" className="btn-secondary">📅 Book a Table</a>
+                            <a href="#menu" className="btn-primary">{t('viewMenu')}</a>
+                            <a href="#reserve" className="btn-secondary">{t('bookTable')}</a>
                         </div>
                         <div className="hero-stats">
                             <div className="stat">
                                 <div className="stat-number" data-count="50">0</div>
-                                <div className="stat-label">Menu Items</div>
+                                <div className="stat-label">{t('statMenuItems')}</div>
                             </div>
                             <div className="stat">
                                 <div className="stat-number" data-count="15">0</div>
-                                <div className="stat-label">Years Experience</div>
+                                <div className="stat-label">{t('statExperience')}</div>
                             </div>
                             <div className="stat">
                                 <div className="stat-number" data-count="98">0</div>
-                                <div className="stat-label">% Happy Clients</div>
+                                <div className="stat-label">{t('statHappyClients')}</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="scroll-indicator">
-                    <span>Scroll</span>
+                    <span>{t('scroll')}</span>
                     <div className="scroll-line"></div>
                 </div>
             </section>
 
             <section className="menu-section" id="menu">
                 <div className="section-header fade-in">
-                    <div className="section-tag">Our Menu</div>
-                    <h2 className="section-title">Explore Our Dishes</h2>
+                    <div className="section-tag">{t('menuSectionTag')}</div>
+                    <h2 className="section-title">{t('menuSectionTitle')}</h2>
                     <div className="section-line"></div>
-                    <p className="section-desc">From our signature burgers to handcrafted sides, every dish is made with passion and the finest ingredients.</p>
+                    <p className="section-desc">{t('menuSectionDesc')}</p>
                 </div>
 
                 <div className="category-tabs fade-in">
-                    <button className={`tab-btn ${activeCategory === 'all' ? 'active' : ''}`} onClick={() => setActiveCategory('all')}>🍽️ All</button>
-                    <button className={`tab-btn ${activeCategory === 'burgers' ? 'active' : ''}`} onClick={() => setActiveCategory('burgers')}>🍔 Burgers</button>
-                    <button className={`tab-btn ${activeCategory === 'sides' ? 'active' : ''}`} onClick={() => setActiveCategory('sides')}>🍟 Sides</button>
-                    <button className={`tab-btn ${activeCategory === 'drinks' ? 'active' : ''}`} onClick={() => setActiveCategory('drinks')}>🥤 Drinks</button>
-                    <button className={`tab-btn ${activeCategory === 'desserts' ? 'active' : ''}`} onClick={() => setActiveCategory('desserts')}>🍰 Desserts</button>
+                    <button className={`tab-btn ${activeCategory === 'all' ? 'active' : ''}`} onClick={() => setActiveCategory('all')}>{t('tabAll')}</button>
+                    {getMenuCategoryOptions().filter((option) => option.value !== 'all').map((option) => (
+                        <button
+                            key={option.value}
+                            className={`tab-btn ${activeCategory === option.value ? 'active' : ''}`}
+                            onClick={() => setActiveCategory(option.value)}
+                        >
+                            {option.label}
+                        </button>
+                    ))}
                 </div>
 
                 <div className="menu-grid" id="menuGrid">
                     {filteredMenu.map((item, index) => {
-                        const imageUrl = getImageUrl(item.image);
+                        const imageUrl = getMediaUrl(item.image);
 
                         return (
                         <div className="menu-card" key={item.id ?? index} data-category={item.category}>
@@ -1001,7 +1090,7 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
                                                     color: star <= Math.round(item.rating) ? 'var(--gold)' : 'var(--text-muted)',
                                                     fontSize: '18px',
                                                 }}
-                                                title={`Rate ${star} stars`}
+                                                title={t('ratingTooltip')}
                                                 className="star-icon"
                                             >
                                                 ★
@@ -1011,7 +1100,7 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
                                             ({parseFloat(item.rating).toFixed(1)})
                                         </span>
                                     </div>
-                                    <button className="btn-add" onClick={() => addToCart(item.name)}>+ Add</button>
+                                    <button className="btn-add" onClick={() => addToCart(item.name)}>{t('addToCart')}</button>
                                 </div>
                             </div>
                         </div>
@@ -1052,11 +1141,11 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
                         />
                         <div className="about-experience">
                             <div className="number">{aboutData.years}</div>
-                            <div className="label">Years</div>
+                            <div className="label">{t('years')}</div>
                         </div>
                     </div>
                         <div className="about-text fade-in">
-                        <h3>{sections?.about?.heading || sections?.aboutHeading || 'Our Story'}</h3>
+                        <h3>{sections?.about?.heading || sections?.aboutHeading || t('aboutHeading')}</h3>
                         <h2>{aboutData.storyTitle}</h2>
                         <p>{aboutData.storyText}</p>
                         <div className="about-features">
@@ -1067,7 +1156,7 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
                                 </div>
                             ))}
                         </div>
-                        <a href="#menu" className="btn-primary">Explore Menu →</a>
+                        <a href="#menu" className="btn-primary">{t('exploreMenu')}</a>
                     </div>
                 </div>
             </section>
@@ -1118,53 +1207,53 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
                         <form id="reservationForm" onSubmit={handleReservationSubmit}>
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>Your Name</label>
-                                    <input type="text" placeholder="John Doe" required />
+                                    <label>{t('yourNameLabel')}</label>
+                                    <input type="text" placeholder={t('yourNamePlaceholder')} required />
                                 </div>
                                 <div className="form-group">
-                                    <label>Phone</label>
-                                    <input type="tel" placeholder="+1 (555) 000-0000" required />
+                                    <label>{t('phoneLabel')}</label>
+                                    <input type="tel" placeholder={t('phonePlaceholder')} required />
                                 </div>
                             </div>
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>Date</label>
+                                    <label>{t('dateLabel')}</label>
                                     <input type="date" required />
                                 </div>
                                 <div className="form-group">
-                                    <label>Time</label>
+                                    <label>{t('timeLabel')}</label>
                                     <input type="time" required />
                                 </div>
                             </div>
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>Guests</label>
+                                    <label>{t('guestsLabel')}</label>
                                     <select required>
-                                        <option value="">Select guests</option>
-                                        <option>1 Person</option>
-                                        <option>2 People</option>
-                                        <option>3 People</option>
-                                        <option>4 People</option>
-                                        <option>5 People</option>
-                                        <option>6+ People</option>
+                                        <option value="">{t('selectGuests')}</option>
+                                        <option>{t('personOption')}</option>
+                                        <option>{t('peopleOption')}</option>
+                                        <option>{t('peopleOption2')}</option>
+                                        <option>{t('peopleOption3')}</option>
+                                        <option>{t('peopleOption4')}</option>
+                                        <option>{t('peopleOption5')}</option>
                                     </select>
                                 </div>
                                 <div className="form-group">
-                                    <label>Occasion</label>
+                                    <label>{t('occasionLabel')}</label>
                                     <select>
-                                        <option value="">Select occasion</option>
-                                        <option>Birthday</option>
-                                        <option>Anniversary</option>
-                                        <option>Business</option>
-                                        <option>Casual</option>
+                                        <option value="">{t('selectOccasion')}</option>
+                                        <option>{t('birthday')}</option>
+                                        <option>{t('anniversary')}</option>
+                                        <option>{t('business')}</option>
+                                        <option>{t('casual')}</option>
                                     </select>
                                 </div>
                             </div>
                             <div className="form-group">
-                                <label>Special Requests</label>
-                                <textarea rows="3" placeholder="Any dietary requirements or special requests..."></textarea>
+                                <label>{t('specialRequestsLabel')}</label>
+                                <textarea rows="3" placeholder={t('specialRequestsPlaceholder')}></textarea>
                             </div>
-                            <button type="submit" className="btn-submit">🍽️ Reserve My Table</button>
+                            <button type="submit" className="btn-submit">{t('reserveButton')}</button>
                         </form>
                     </div>
                 </div>
@@ -1173,8 +1262,8 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
             <footer className="footer">
                 <div className="footer-content">
                     <div className="footer-brand">
-                        <span className="logo-text" style={{ fontFamily: "'Playfair Display', serif", color: 'var(--gold)' }}>{logoSrc ? '' : brandLogo} {brandName} House</span>
-                        <p>Premium burgers crafted with passion. Every bite tells a story of quality, flavor, and dedication to the art of grilling.</p>
+                        <span className="logo-text" style={{ fontFamily: "'Playfair Display', serif", color: 'var(--gold)' }}>{logoSrc ? '' : brandLogo} {brandName} {t('house')}</span>
+                        <p>{t('footerDescription')}</p>
                         <div className="social-links">
                             <a href="#" className="social-link" aria-label="Facebook">📘</a>
                             <a href="#" className="social-link" aria-label="Instagram">📸</a>
@@ -1183,51 +1272,61 @@ export default function Home({ menuItems: initialMenuItems = [], restaurantSetti
                         </div>
                     </div>
                     <div className="footer-col">
-                        <h4>Quick Links</h4>
+                        <h4>{t('footerQuickLinks')}</h4>
                         <ul>
-                            <li><a href="#home">Home</a></li>
-                            <li><a href="#menu">Menu</a></li>
-                            <li><a href="#specials">Specials</a></li>
-                            <li><a href="#about">About Us</a></li>
-                            <li><a href="#reserve">Reservations</a></li>
+                            <li><a href="#home">{t('home')}</a></li>
+                            <li><a href="#menu">{t('menu')}</a></li>
+                            <li><a href="#specials">{t('specials')}</a></li>
+                            <li><a href="#about">{t('aboutUs')}</a></li>
+                            <li><a href="#reserve">{t('reservations')}</a></li>
                             <li>
-                                <a href="/register" onClick={(e) => { e.preventDefault(); router.get('/register'); }}>Register</a>
+                                <a 
+                                    href="https://natinaelyosef.github.io/natinael-yosef-portfolio/" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="external"
+                                >
+                                    {t('contactDeveloper')}
+                                </a>
                             </li>
                             <li>
-                                <a href="/login" onClick={(e) => { e.preventDefault(); router.get('/login'); }}>Login</a>
+                                <a href="/register" onClick={(e) => { e.preventDefault(); router.get('/register'); }}>{t('register')}</a>
+                            </li>
+                            <li>
+                                <a href="/login" onClick={(e) => { e.preventDefault(); router.get('/login'); }}>{t('login')}</a>
                             </li>
                         </ul>
                     </div>
                     <div className="footer-col">
-                        <h4>Menu</h4>
+                        <h4>{t('footerMenu')}</h4>
                         <ul>
-                            <li><a href="#menu">Burgers</a></li>
-                            <li><a href="#menu">Sides</a></li>
-                            <li><a href="#menu">Drinks</a></li>
-                            <li><a href="#menu">Desserts</a></li>
-                            <li><a href="#menu">Kids Menu</a></li>
+                            <li><a href="#menu">{t('burgerLabel')}</a></li>
+                            <li><a href="#menu">{t('sidesLabel')}</a></li>
+                            <li><a href="#menu">{t('drinksLabel')}</a></li>
+                            <li><a href="#menu">{t('dessertsLabel')}</a></li>
+                            <li><a href="#menu">{t('kidsMenuLabel')}</a></li>
                         </ul>
                     </div>
                     <div className="footer-col">
-                        <h4>Hours</h4>
+                        <h4>{t('footerHours')}</h4>
                         <ul>
-                            <li><a href="#">Mon–Fri: 11AM–11PM</a></li>
-                            <li><a href="#">Saturday: 10AM–12AM</a></li>
-                            <li><a href="#">Sunday: 10AM–10PM</a></li>
-                            <li><a href="#">Happy Hour: 4–6PM</a></li>
+                            <li><a href="#">{t('hoursRangeWeek')}</a></li>
+                            <li><a href="#">{t('hoursRangeSat')}</a></li>
+                            <li><a href="#">{t('hoursRangeSun')}</a></li>
+                            <li><a href="#">{t('happyHour')}</a></li>
                         </ul>
                     </div>
                 </div>
                 <div className="footer-bottom">
-                    <p>© 2024 {brandName} House. All rights reserved. Made with ❤️ and 🍔</p>
+                    <p>© 2024 {brandName} House. {t('allRightsReserved')} {t('madeWithLove')}</p>
                 </div>
             </footer>
 
             <button 
                 className="cart-float" 
                 id="cartFloat" 
-                aria-label="View Cart" 
-                onClick={() => showNotification('🛒 Cart feature coming soon!')}
+                aria-label={t('viewCart')} 
+                onClick={() => showNotification(t('cartFeatureComingSoon'))}
             >
                 🛒
                 <span className="cart-count" id="cartCount">{cartItems}</span>

@@ -1,9 +1,11 @@
 // resources/js/Pages/Customer/Dashboard.jsx
 import React from 'react';
+import useTranslation from '@/i18n/useTranslation';
 import { Link } from '@inertiajs/react';
 import CustomerLayout from '@/Layouts/CustomerLayout';
 
 export default function CustomerDashboard({ userName, myReservations, activeCount }) {
+    const { t } = useTranslation();
     const recentReservations = (myReservations || []).slice(0, 5);
 
     const statusColors = {
@@ -24,8 +26,8 @@ export default function CustomerDashboard({ userName, myReservations, activeCoun
         <CustomerLayout title="Customer Dashboard" active="dashboard">
             {/* Welcome Banner */}
             <div className="mb-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white shadow-lg">
-                <h2 className="text-2xl font-bold mb-2">Welcome, {userName}!</h2>
-                <p className="text-blue-100">Manage your reservations and enjoy our restaurant.</p>
+                <h2 className="text-2xl font-bold mb-2">{t('welcome')}, {userName}!</h2>
+                <p className="text-blue-100">{t('manageReservationsEnjoy')}</p>
             </div>
 
             {/* Stats */}
@@ -34,7 +36,7 @@ export default function CustomerDashboard({ userName, myReservations, activeCoun
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-xl">📅</div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500">Total Reservations</p>
+                            <p className="text-sm font-medium text-gray-500">{t('totalReservations')}</p>
                             <p className="text-2xl font-bold text-gray-900">{(myReservations || []).length}</p>
                         </div>
                     </div>
@@ -43,7 +45,7 @@ export default function CustomerDashboard({ userName, myReservations, activeCoun
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-xl">✅</div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500">Active</p>
+                            <p className="text-sm font-medium text-gray-500">{t('active')}</p>
                             <p className="text-2xl font-bold text-green-600">{activeCount || 0}</p>
                         </div>
                     </div>
@@ -52,9 +54,9 @@ export default function CustomerDashboard({ userName, myReservations, activeCoun
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-purple-50 rounded-full flex items-center justify-center text-xl">🍽️</div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500">Quick Action</p>
+                            <p className="text-sm font-medium text-gray-500">{t('quickAction')}</p>
                             <Link href="/customer/reserve" className="text-sm font-bold text-blue-600 hover:text-blue-800">
-                                Book Now →
+                                {t('bookNow')} →
                             </Link>
                         </div>
                     </div>
@@ -69,8 +71,8 @@ export default function CustomerDashboard({ userName, myReservations, activeCoun
                 >
                     <span className="text-3xl mr-4">📅</span>
                     <div>
-                        <p className="text-lg font-semibold text-blue-900">Make a Reservation</p>
-                        <p className="text-sm text-blue-600">Book a table for your next visit</p>
+                        <p className="text-lg font-semibold text-blue-900">{t('makeReservation')}</p>
+                        <p className="text-sm text-blue-600">{t('bookTableVisit')}</p>
                     </div>
                 </Link>
                 <Link
@@ -79,8 +81,8 @@ export default function CustomerDashboard({ userName, myReservations, activeCoun
                 >
                     <span className="text-3xl mr-4">📋</span>
                     <div>
-                        <p className="text-lg font-semibold text-green-900">My Reservations</p>
-                        <p className="text-sm text-green-600">View and manage your bookings</p>
+                        <p className="text-lg font-semibold text-green-900">{t('myReservations')}</p>
+                        <p className="text-sm text-green-600">{t('viewManageBookings')}</p>
                     </div>
                 </Link>
             </div>
@@ -88,17 +90,17 @@ export default function CustomerDashboard({ userName, myReservations, activeCoun
             {/* Recent Reservations */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-800">Recent Reservations</h3>
+                    <h3 className="text-lg font-semibold text-gray-800">{t('recentReservations')}</h3>
                     <Link href="/customer/my-reservations" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                        View All →
+                        {t('viewAll')} →
                     </Link>
                 </div>
                 {recentReservations.length === 0 ? (
                     <div className="text-center py-8 text-gray-500">
                         <span className="text-4xl block mb-3">📅</span>
-                        <p className="font-medium">No reservations yet</p>
+                        <p className="font-medium">{t('noReservationsYet')}</p>
                         <Link href="/customer/reserve" className="text-blue-600 hover:underline text-sm mt-1 inline-block">
-                            Make your first reservation →
+                            {t('makeFirstReservation')} →
                         </Link>
                     </div>
                 ) : (

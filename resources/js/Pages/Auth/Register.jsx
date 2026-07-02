@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -11,6 +12,7 @@ export default function Register() {
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const { t } = useTranslation();
 
     const submit = (e) => {
         e.preventDefault();
@@ -366,7 +368,7 @@ export default function Register() {
 
     return (
         <>
-            <Head title="Register" />
+            <Head title={t('registerTitle')} />
             
             <div className="auth-container">
                 <div className="auth-bg-pattern"></div>
@@ -375,7 +377,7 @@ export default function Register() {
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
-                    Back to Home
+                    {t('backToHome')}
                 </Link>
 
                 <div className="auth-card">
@@ -386,13 +388,13 @@ export default function Register() {
                         </Link>
 
                         <div className="form-header">
-                            <h2 className="form-title">Create Account</h2>
-                            <p className="form-subtitle">Fill in your details to get started</p>
+                            <h2 className="form-title">{t('createAccount')}</h2>
+                            <p className="form-subtitle">{t('registerSubtitle')}</p>
                         </div>
 
                         <form onSubmit={submit}>
                             <div className="input-group">
-                                <label className="input-label" htmlFor="name">Full Name</label>
+                                <label className="input-label" htmlFor="name">{t('fullName')}</label>
                                 <div className="input-wrapper">
                                     <input
                                         id="name"
@@ -412,7 +414,7 @@ export default function Register() {
                             </div>
 
                             <div className="input-group">
-                                <label className="input-label" htmlFor="email">Email Address</label>
+                                <label className="input-label" htmlFor="email">{t('emailAddress')}</label>
                                 <div className="input-wrapper">
                                     <input
                                         id="email"
@@ -431,7 +433,7 @@ export default function Register() {
                             </div>
 
                             <div className="input-group">
-                                <label className="input-label" htmlFor="password">Password</label>
+                                <label className="input-label" htmlFor="password">{t('password')}</label>
                                 <div className="input-wrapper">
                                     <input
                                         id="password"
@@ -458,7 +460,7 @@ export default function Register() {
                             </div>
 
                             <div className="input-group">
-                                <label className="input-label" htmlFor="password_confirmation">Confirm Password</label>
+                                <label className="input-label" htmlFor="password_confirmation">{t('confirmPasswordLabel')}</label>
                                 <div className="input-wrapper">
                                     <input
                                         id="password_confirmation"
@@ -491,11 +493,11 @@ export default function Register() {
                                             <circle cx="12" cy="12" r="10" strokeOpacity="0.25"/>
                                             <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/>
                                         </svg>
-                                        Creating Account...
+                                        {t('creatingAccount')}
                                     </>
                                 ) : (
                                     <>
-                                        Create Account
+                                        {t('createAccount')}
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M5 12h14M12 5l7 7-7 7"/>
                                         </svg>
@@ -504,7 +506,7 @@ export default function Register() {
                             </button>
                         </form>
 
-                        <div className="divider">Or register with</div>
+                        <div className="divider">{t('orRegisterWith')}</div>
 
                         <a href={route('auth.google')} className="btn-google">
                             <svg width="20" height="20" viewBox="0 0 24 24">
@@ -513,13 +515,13 @@ export default function Register() {
                                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                             </svg>
-                            Continue with Google
+                            {t('continueWithGoogle')}
                         </a>
 
                         <div className="login-prompt">
-                            Already have an account?
+                            {t('alreadyHaveAccount')}
                             <Link href={route('login')} className="login-link">
-                                Sign In
+                                {t('signIn')}
                             </Link>
                         </div>
                     </div>

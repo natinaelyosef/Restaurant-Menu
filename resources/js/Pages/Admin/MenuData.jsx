@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
+import { getMenuCategoryOptions, normalizeMenuCategory, formatMenuCategoryLabel } from '../../utils/menuCategories';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function MenuData({ userName, userRole }) {
+    const { t } = useTranslation();
     const [menuItems, setMenuItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('all');
@@ -14,7 +17,7 @@ export default function MenuData({ userName, userRole }) {
         name: '',
         desc: '',
         price: '',
-        category: 'appetizer',
+        category: 'burgers',
         image: null,
         image_url: '',
     });
@@ -78,7 +81,7 @@ export default function MenuData({ userName, userRole }) {
             name: item.name,
             desc: item.desc || '',
             price: item.price,
-            category: item.category,
+            category: normalizeMenuCategory(item.category),
             image: null,
             image_url: isUrl ? item.image : '',
         });
@@ -139,14 +142,14 @@ export default function MenuData({ userName, userRole }) {
         return `/storage/${imagePath}`;
     };
 
-    const categories = ['all', 'appetizer', 'main_course', 'burgers', 'dessert', 'beverage', 'salad', 'soup'];
-    const filtered = filter === 'all' ? menuItems : menuItems.filter((item) => item.category === filter);
+    const categories = getMenuCategoryOptions();
+    const filtered = filter === 'all' ? menuItems : menuItems.filter((item) => normalizeMenuCategory(item.category) === filter);
 
     return (
         <AdminLayout title="Menu Data" active="menu-data">
             <div className="mb-6">
-                <h1 className="text-2xl font-bold text-gray-900">📋 Menu Data</h1>
-                <p className="text-gray-600 mt-1">View and manage all menu items</p>
+                <h1 className="text-2xl font-bold text-gray-900">{t('menuData')}</h1>
+                <p className="text-gray-600 mt-1">{t('viewManageMenuItems')}</p>
             </div>
 
             {/* Filter */}
@@ -154,15 +157,15 @@ export default function MenuData({ userName, userRole }) {
                 <div className="flex flex-wrap gap-2">
                     {categories.map((cat) => (
                         <button
-                            key={cat}
-                            onClick={() => setFilter(cat)}
+                            key={cat.value}
+                            onClick={() => setFilter(cat.value)}
                             className={`px-3 py-1.5 text-sm rounded-full transition-colors ${
-                                filter === cat
+                                filter === cat.value
                                     ? 'bg-blue-600 text-white'
                                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             }`}
                         >
-                            {cat === 'all' ? 'All' : cat.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+                            {cat.label}
                         </button>
                     ))}
                 </div>
@@ -173,13 +176,13 @@ export default function MenuData({ userName, userRole }) {
                 {loading ? (
                     <div className="p-12 text-center text-gray-500">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                        Loading menu items...
+                        {t('loading')}
                     </div>
                 ) : filtered.length === 0 ? (
                     <div className="p-12 text-center text-gray-500">
                         <span className="text-4xl block mb-4">🍽️</span>
-                        <p className="text-lg font-medium">No menu items found</p>
-                        <p className="text-sm mt-1">Add items from the Manage Menu page</p>
+                        <p className="text-lg font-medium">{t('noMenuItemsFound')}</p>
+                        <p className="text-sm mt-1">{t('addItemsFromManageMenu')}</p>
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
@@ -187,11 +190,11 @@ export default function MenuData({ userName, userRole }) {
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('name')}</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('category')}</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('price')}</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('status')}</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{t('actions')}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
@@ -220,7 +223,7 @@ export default function MenuData({ userName, userRole }) {
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-                                                {(item.category || 'N/A').replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                                                {formatMenuCategoryLabel(normalizeMenuCategory(item.category))}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-sm font-semibold text-gray-900">${parseFloat(item.price).toFixed(2)}</td>
@@ -228,7 +231,7 @@ export default function MenuData({ userName, userRole }) {
                                             <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                                                 item.is_active || item.is_available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                                             }`}>
-                                                {item.is_active || item.is_available ? 'Available' : 'Unavailable'}
+                                                {item.is_active || item.is_available ? t('available') : t('unavailable')}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-sm font-medium">
@@ -237,14 +240,14 @@ export default function MenuData({ userName, userRole }) {
                                                     onClick={() => openEditModal(item)}
                                                     className="text-blue-600 hover:text-blue-900 transition-colors"
                                                 >
-                                                    Edit
+                                                    {t('edit')}
                                                 </button>
                                                 <span className="text-gray-200">|</span>
                                                 <button
                                                     onClick={() => handleDelete(item.id)}
                                                     className="text-red-600 hover:text-red-900 transition-colors"
                                                 >
-                                                    Delete
+                                                    {t('delete')}
                                                 </button>
                                             </div>
                                         </td>
@@ -261,12 +264,12 @@ export default function MenuData({ userName, userRole }) {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
                     <div className="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-gray-100">
                         <div className="flex justify-between items-center p-5 border-b border-gray-100">
-                            <h3 className="text-lg font-bold text-gray-900">✏️ Edit Menu Item</h3>
+                            <h3 className="text-lg font-bold text-gray-900">{t('editMenuItem')}</h3>
                             <button onClick={closeEditModal} className="text-gray-400 hover:text-gray-600 text-2xl transition-colors">&times;</button>
                         </div>
                         <form onSubmit={handleEditSubmit} className="p-5 space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Item Name</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('itemName')}</label>
                                 <input
                                     type="text"
                                     name="name"
@@ -278,7 +281,7 @@ export default function MenuData({ userName, userRole }) {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('price')}</label>
                                     <input
                                         type="number"
                                         step="0.01"
@@ -290,7 +293,7 @@ export default function MenuData({ userName, userRole }) {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('category')}</label>
                                     <select
                                         name="category"
                                         value={editForm.category}
@@ -298,18 +301,14 @@ export default function MenuData({ userName, userRole }) {
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                         required
                                     >
-                                        <option value="appetizer">Appetizer</option>
-                                        <option value="main_course">Main Course</option>
-                                        <option value="burgers">Burgers</option>
-                                        <option value="dessert">Dessert</option>
-                                        <option value="beverage">Beverage</option>
-                                        <option value="salad">Salad</option>
-                                        <option value="soup">Soup</option>
+                                        {getMenuCategoryOptions().filter((option) => option.value !== 'all').map((option) => (
+                                            <option key={option.value} value={option.value}>{option.label}</option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('description')}</label>
                                 <textarea
                                     name="desc"
                                     value={editForm.desc}
@@ -322,7 +321,7 @@ export default function MenuData({ userName, userRole }) {
 
                             {/* Image Source Toggle */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">{t('image')}</label>
                                 <div className="flex gap-4 mb-3">
                                     <label className={`flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer transition-colors ${imageSource === 'upload' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
                                         <input
@@ -333,7 +332,7 @@ export default function MenuData({ userName, userRole }) {
                                             onChange={() => setImageSource('upload')}
                                             className="text-blue-600 focus:ring-blue-500"
                                         />
-                                        <span className="text-sm font-medium">Upload File</span>
+                                        <span className="text-sm font-medium">{t('upload')}</span>
                                     </label>
                                     <label className={`flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer transition-colors ${imageSource === 'url' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
                                         <input
@@ -344,7 +343,7 @@ export default function MenuData({ userName, userRole }) {
                                             onChange={() => setImageSource('url')}
                                             className="text-blue-600 focus:ring-blue-500"
                                         />
-                                        <span className="text-sm font-medium">Use URL</span>
+                                        <span className="text-sm font-medium">{t('url')}</span>
                                     </label>
                                 </div>
 
@@ -388,10 +387,10 @@ export default function MenuData({ userName, userRole }) {
 
                             <div className="flex gap-3 pt-4 border-t border-gray-100">
                                 <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                                    Save Changes
+                                    {t('saveChanges')}
                                 </button>
                                 <button type="button" onClick={closeEditModal} className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
-                                    Cancel
+                                    {t('cancel')}
                                 </button>
                             </div>
                         </form>

@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
+import { Head, Link, router, usePage } from '@inertiajs/react';
+import LanguageSwitcher from '@/Components/LanguageSwitcher';
+import useTranslation from '@/i18n/useTranslation';
 
 export default function DashboardLayout({ title = 'Dashboard', active = 'dashboard', children }) {
     const { auth } = usePage().props;
     const user = auth?.user ?? { name: 'User', email: '' };
+    const { t } = useTranslation();
     useEffect(() => {
         try {
             if (!auth?.user) {
-                Inertia.visit('/login', { replace: true });
+                router.visit('/login', { replace: true });
             }
         } catch (e) {
             // ignore
@@ -18,12 +20,12 @@ export default function DashboardLayout({ title = 'Dashboard', active = 'dashboa
     const [userMenuOpen, setUserMenuOpen] = useState(false);
 
     const navLinks = [
-        { key: 'dashboard', name: 'Dashboard', href: '/dashboard', icon: 'Home' },
-        { key: 'menu-items', name: 'Manage Menu', href: '/dashboard/menu-items', icon: 'Menu' },
-        { key: 'menu-data', name: 'Menu Data', href: '/dashboard/menu-data', icon: 'Data' },
-        { key: 'orders', name: 'Orders', href: '/dashboard/orders', icon: 'Orders' },
-        { key: 'reservations', name: 'Reservations', href: '/dashboard/reservations', icon: 'Calendar' },
-        { key: 'settings', name: 'Settings', href: '/dashboard/settings', icon: 'Settings' },
+        { key: 'dashboard', name: t('dashboard'), href: '/dashboard', icon: 'Home' },
+        { key: 'menu-items', name: t('manageMenu'), href: '/dashboard/menu-items', icon: 'Menu' },
+        { key: 'menu-data', name: t('menuData'), href: '/dashboard/menu-data', icon: 'Data' },
+        { key: 'orders', name: t('orders'), href: '/dashboard/orders', icon: 'Orders' },
+        { key: 'reservations', name: t('reservations'), href: '/dashboard/reservations', icon: 'Calendar' },
+        { key: 'settings', name: t('settings'), href: '/dashboard/settings', icon: 'Settings' },
     ];
 
     return (
@@ -47,6 +49,9 @@ export default function DashboardLayout({ title = 'Dashboard', active = 'dashboa
                     </span>
                 </div>
 
+                <div className="flex items-center md:me-4">
+                    <LanguageSwitcher />
+                </div>
                 <div className="relative">
                     <button
                         type="button"

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
-import { Link, usePage } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
+import LanguageSwitcher from '@/Components/LanguageSwitcher';
+import { Link, router, usePage } from '@inertiajs/react';
 
 export default function GuestLayout({ children }) {
     const { props } = usePage();
@@ -26,7 +26,7 @@ export default function GuestLayout({ children }) {
             const user = props?.auth?.user;
             if (user) {
                 const dashboard = user.dashboard || '/dashboard';
-                Inertia.visit(dashboard, { replace: true });
+                router.visit(dashboard, { replace: true });
             }
         } catch (e) {
             // ignore
@@ -34,7 +34,10 @@ export default function GuestLayout({ children }) {
     }, [props]);
 
     return (
-        <div className="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0">
+        <div className="relative flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0">
+            <div className="absolute top-4 right-4 z-20">
+                <LanguageSwitcher />
+            </div>
             <div>
                 <Link href="/">
                     <ApplicationLogo className="h-20 w-20 fill-current text-gray-500" />
