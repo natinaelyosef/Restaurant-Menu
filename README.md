@@ -1,6 +1,6 @@
 # Restaurant-Menu
 
-A Laravel (v12) application for managing a restaurant menu, reservations, and basic restaurant settings. Built with PHP ^8.2, Inertia + React, Tailwind CSS, and Vite. Includes utilities for PDF generation and a simple public view.
+A React and Laravel (v12) application for managing a restaurant menu, reservations, and basic restaurant settings. Built with PHP ^8.2, Inertia + React, Tailwind CSS, and Vite. Includes utilities for PDF generation and a simple public view.
 
 **Features**
 - **Menu management:** add, edit, and remove menu items (`app/Models/MenuItem.php`).
